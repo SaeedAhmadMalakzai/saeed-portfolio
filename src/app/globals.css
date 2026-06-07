@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffff;
+    --foreground: #ededed;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ===== CUSTOM CURSOR - Exact match to yuhsinlin.com ===== */
+
+/* Hide default cursor everywhere */
+html, body, * {
+  cursor: none !important;
+}
+
+/* Cursor wrapper */
+.cursor-wrapper {
+  pointer-events: none;
+}
+
+/* iPad Pro Portrait */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1024px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+  body {
+    cursor: default;
+  }
+
+  .cursor-wrapper {
+    display: none;
+  }
+
+  a, button, [role="button"], input, textarea {
+    cursor: pointer;
+  }
+}
+
+/* iPad Pro Landscape */
+@media only screen 
+  and (min-device-width: 1366px) 
+  and (max-device-width: 1366px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+  body {
+    cursor: default;
+  }
+
+  .cursor-wrapper {
+    display: none;
+  }
+
+  a, button, [role="button"], input, textarea {
+    cursor: pointer;
+  }
+}
+
+/* General touch devices */
+@media (hover: none) and (pointer: coarse) {
+  body {
+    cursor: default;
+  }
+
+  .cursor-wrapper {
+    display: none !important;
+  }
+
+  a, button, [role="button"], input, textarea {
+    cursor: pointer;
+  }
+}
+html, body, * {
+  cursor: none !important;
+}
+
+/* iPad Pro Portrait */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1024px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+  body { cursor: default; }
+  .cursor-wrapper { display: none; }
+  a, button { cursor: pointer; }
+}
+
+/* iPad Pro Landscape */
+@media only screen 
+  and (min-device-width: 1366px) 
+  and (max-device-width: 1366px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+  body { cursor: default; }
+  .cursor-wrapper { display: none; }
+  a, button { cursor: pointer; }
+}
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: default; }
+  .cursor-wrapper { display: none !important; }
+  a, button { cursor: pointer; }
+}
