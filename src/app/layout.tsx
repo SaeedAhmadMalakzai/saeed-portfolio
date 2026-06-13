@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { profile } from "@/lib/data";
-import CustomCursor from "@/components/layout/CustomCursor";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,7 +32,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
       <body className="flex min-h-full flex-col">
-      <CustomCursor />
+    
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />
