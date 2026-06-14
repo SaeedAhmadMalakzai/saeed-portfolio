@@ -13,7 +13,7 @@ export function Footer() {
   const gridRef = useRef<{ col: number; row: number; x: number; y: number; opacity: number; baseOpacity: number; hoverIntensity: number }[]>([]);
   const animationRef = useRef<number>(0);
 
-  const cellSize = 20; // Slightly bigger
+  const cellSize = 20;
   const gap = 4;
 
   const initGrid = useCallback((width: number, height: number) => {
@@ -56,12 +56,10 @@ export function Footer() {
     const grid = gridRef.current;
     const mouse = mouseRef.current;
 
-    // Find which cell the mouse is over
     const mouseCol = Math.floor((mouse.x + gap / 2) / (cellSize + gap));
     const mouseRow = Math.floor((mouse.y + gap / 2) / (cellSize + gap));
 
     grid.forEach((cell) => {
-      // Check if mouse is directly over this cell
       const isHovered = cell.col === mouseCol && cell.row === mouseRow;
 
       let targetHover = 0;
@@ -69,21 +67,17 @@ export function Footer() {
         targetHover = 1;
       }
 
-      // Smooth lerp for hover
       cell.hoverIntensity += (targetHover - cell.hoverIntensity) * 0.15;
 
-      // Calculate final opacity with hover
       const hoverOpacity = cell.hoverIntensity * 0.9;
       const finalOpacity = Math.min(cell.baseOpacity + hoverOpacity, 1);
 
-      // Color: brighter green on hover
       const greenValue = Math.floor(100 + cell.hoverIntensity * 155);
       const alpha = finalOpacity;
 
       ctx.fillStyle = `rgba(0, ${greenValue}, 40, ${alpha})`;
-      ctx.beginPath();
-      ctx.roundRect(cell.x, cell.y, cellSize, cellSize, 3);
-      ctx.fill();
+      // Square boxes - no rounded corners
+      ctx.fillRect(cell.x, cell.y, cellSize, cellSize);
     });
 
     animationRef.current = requestAnimationFrame(draw);
@@ -172,39 +166,39 @@ export function Footer() {
           </nav>
 
           {/* Big Contact Button - takes center space */}
-          <div className="flex flex-1 items-center justify-center px-4 pointer-events-auto ">
+          <div className="flex flex-1 items-center justify-center px-4 pointer-events-auto">
             <Link
               href="/contact"
-              className="group relative inline-flex items-center bg-[#0a0e15] justify-center  w-full max-w-lg px-20 py-10 text-4xl font-mono font-medium text-white"
+              className="group relative inline-flex items-center bg-[#0a0e15] justify-center w-full max-w-lg px-20 py-10 text-4xl font-mono font-medium text-white"
             >
               {/* Corner brackets */}
               <span className="absolute -left-5 -top-5 text-green-500 transition-colors duration-300 group-hover:text-green-400">
                 <svg width="56" height="56" viewBox="0 0 16 16" fill="none">
-                  <path d="M1 6L1 1L6 1" stroke="currentColor" strokeWidth="1.5"  />
+                  <path d="M1 6L1 1L6 1" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
               </span>
               <span className="absolute -right-5 -top-5 text-green-500 transition-colors duration-300 group-hover:text-green-400">
                 <svg width="56" height="56" viewBox="0 0 16 16" fill="none">
-                  <path d="M15 6L15 1L10 1" stroke="currentColor" strokeWidth="1.5"  />
+                  <path d="M15 6L15 1L10 1" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
               </span>
               <span className="absolute -right-5 -bottom-5 text-green-500 transition-colors duration-300 group-hover:text-green-400">
                 <svg width="56" height="56" viewBox="0 0 16 16" fill="none">
-                  <path d="M15 10L15 15L10 15" stroke="currentColor" strokeWidth="1.5"  />
+                  <path d="M15 10L15 15L10 15" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
               </span>
               <span className="absolute -left-5 -bottom-5 text-green-500 transition-colors duration-300 group-hover:text-green-400">
                 <svg width="56" height="56" viewBox="0 0 16 16" fill="none">
-                  <path d="M1 10L1 15L6 15" stroke="currentColor" strokeWidth="1.5"  />
+                  <path d="M1 10L1 15L6 15" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
               </span>
 
               {/* Text slide animation */}
               <span className="relative h-[1.2em] overflow-hidden">
-                <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full ">
+                <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
                   SAY HELLO
                 </span>
-                <span className="absolute top-full left-0 block transition-transform duration-300 ease-out group-hover:-translate-y-full ">
+                <span className="absolute top-full left-0 block transition-transform duration-300 ease-out group-hover:-translate-y-full">
                   SAY HELLO
                 </span>
               </span>
