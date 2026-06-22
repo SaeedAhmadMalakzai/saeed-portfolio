@@ -33,152 +33,154 @@ const NAV_INDEX = ["01", "02", "03", "04", "05", "06", "07"];
 const ACTIVE_NAV_INDEX = 3;
 const ACTIVE_NAV_LABEL = "Our team";
 
-const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-const lerp = (a, b, t) => a + (b - a) * t;
+const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
 export default function TeamScrollSection() {
-  const wrapperRef = useRef(null);
-  const stageRef = useRef(null);
-  const cardRefs = useRef([]);
-  const textRefs = useRef([]);
-  const wordRefs = useRef([]);
-  const numberOnesRef = useRef(null);
-  const numberTickRef = useRef(null);
-  const navTickRef = useRef(null);
+  const wrapperRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLElement | null)[]>([]);
+  const textRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const wordRefs = useRef<HTMLSpanElement[][]>([]);
+  const numberOnesRef = useRef<HTMLSpanElement>(null);
+  const numberTickRef = useRef<HTMLSpanElement>(null);
+  const navTickRef = useRef<HTMLElement>(null);
   const currentIndexRef = useRef(-1);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const total = ITEMS.length;
 
-    const applyCardTransform = (el, t) => {
-      const tt = clamp(t, -1, 1);
-      let x, y, rot, scale, opacity;
-
-      if (tt <= 0) {
-        const k = tt + 1;
-        x = lerp(-50 + 38, -50, k);
-        y = lerp(-50 + 34, -50, k);
-        rot = lerp(7, 0, k);
-        scale = lerp(1.12, 1, k);
-        opacity = clamp(k * 1.8, 0, 1);
-      } else {
-        const k = tt;
-        x = lerp(-50, -50 - 32, k);
-        y = lerp(-50, -50 - 36, k);
-        rot = lerp(0, -6, k);
-        scale = lerp(1, 0.86, k);
-        opacity = clamp(1 - k * 1.6, 0, 1);
-      }
-
-      gsap.set(el, {
-        xPercent: x,
-        yPercent: y,
-        rotate: rot,
-        scale,
-        opacity,
-        force3D: true,
-      });
-    };
-
-    const applyTextReveal = (container, words, t) => {
-      const tt = clamp(t, -1, 1);
-
-      if (tt <= 0) {
-        const enterK = clamp((tt + 1) * 1.3, 0, 1);
-        gsap.set(container, { opacity: enterK });
-        const reveal = tt + 1;
-        const count = words.length || 1;
-        words.forEach((w, i) => {
-          const threshold = i / count;
-          const wordT = clamp((reveal - threshold) * 3.2, 0, 1);
-          w.style.opacity = lerp(0.28, 1, wordT);
-        });
-      } else {
-        const exitK = clamp(1 - tt * 1.6, 0, 1);
-        gsap.set(container, { opacity: exitK });
-        words.forEach((w) => { w.style.opacity = 1; });
-      }
-    };
-
-    const setActiveIndex = (idx) => {
-      if (idx === currentIndexRef.current) return;
-      currentIndexRef.current = idx;
-      const item = ITEMS[clamp(idx, 0, total - 1)];
-      if (!item) return;
-
-      const lastDigit = item.number.slice(-1);
-
-      if (numberOnesRef.current) {
-        if (reduceMotion) {
-          numberOnesRef.current.textContent = lastDigit;
-        } else {
-          gsap.fromTo(numberOnesRef.current,
-            { yPercent: 40, opacity: 0, rotate: 8 },
-            {
-              yPercent: 0, opacity: 1, rotate: 0,
-              duration: 0.45, ease: "power3.out",
-              onStart: () => {
-                if (numberOnesRef.current) numberOnesRef.current.textContent = lastDigit;
-              },
-            }
-          );
-        }
-      }
-
-      if (numberTickRef.current && !reduceMotion) {
-        gsap.fromTo(numberTickRef.current,
-          { scaleX: 0 },
-          { scaleX: 1, duration: 0.5, ease: "power2.out", transformOrigin: "left" }
-        );
-      }
-    };
-
+    // Split text into word spans
     wordRefs.current = [];
     textRefs.current.forEach((el, i) => {
       if (!el) return;
       const words = ITEMS[i].text.split(" ");
       el.innerHTML = words
-        .map((w) => `<span style="display:inline-block;margin-right:0.28em;opacity:0.28;">${w}</span>`)
+        .map((w) => `<span style="display:inline-block;margin-right:0.25em;opacity:0.28;">${w}</span>`)
         .join(" ");
       wordRefs.current[i] = Array.from(el.querySelectorAll("span"));
     });
 
-    const updateScene = (progress) => {
-      const p = progress * total;
+    const updateScene = (progress: number) => {
+      const p = progress * total; // 0 to 4
 
       for (let i = 0; i < total; i++) {
-        const localT = p - (i + 0.5);
         const card = cardRefs.current[i];
         const text = textRefs.current[i];
         const words = wordRefs.current[i] || [];
 
-        if (Math.abs(localT) > 1.15) {
-          if (card) gsap.set(card, { opacity: 0 });
-          if (text) gsap.set(text, { opacity: 0 });
-          continue;
+        if (!card || !text) continue;
+
+        // Each slide gets 1 unit of progress
+        // Slide i is active when p is between i and i+1
+        const slideProgress = p - i; // 0 when slide starts, 0.5 when centered, 1 when ended
+
+        let yOffset: number;
+        let scale: number;
+        let opacity: number;
+        let zIndex: number;
+
+        if (slideProgress < 0) {
+          // Card is below viewport, waiting to enter
+          yOffset = 80;
+          scale = 0.7;
+          opacity = 0;
+          zIndex = i;
+        } else if (slideProgress < 0.5) {
+          // Card is entering from bottom
+          const enterProgress = slideProgress / 0.5;
+          yOffset = 80 - (enterProgress * 80);
+          scale = 0.7 + (enterProgress * 0.3);
+          opacity = enterProgress;
+          zIndex = i + 10;
+        } else if (slideProgress < 1) {
+          // Card is being covered by next (exiting to top)
+          const exitProgress = (slideProgress - 0.5) / 0.5;
+          yOffset = -exitProgress * 20;
+          scale = 1.0 - (exitProgress * 0.05);
+          opacity = 1 - (exitProgress * 0.3);
+          zIndex = i;
+        } else {
+          // Card is stacked above
+          yOffset = -20 - ((slideProgress - 1) * 5);
+          scale = 0.95 - ((slideProgress - 1) * 0.02);
+          opacity = 0.7 - ((slideProgress - 1) * 0.1);
+          zIndex = i;
         }
 
-        if (card) applyCardTransform(card, localT);
-        if (text) applyTextReveal(text, words, localT);
+        gsap.set(card, {
+          yPercent: yOffset,
+          scale: clamp(scale, 0.5, 1.2),
+          opacity: clamp(opacity, 0, 1),
+          zIndex: zIndex,
+        });
 
-        const dist = Math.abs(localT);
-        if (card) gsap.set(card, { zIndex: 100 - Math.round(dist * 50) });
+        // Text animation
+        let textOpacity: number;
+        if (slideProgress < 0.1) {
+          textOpacity = 0;
+        } else if (slideProgress < 0.3) {
+          textOpacity = (slideProgress - 0.1) / 0.2;
+        } else if (slideProgress > 0.7) {
+          textOpacity = 1 - (slideProgress - 0.7) / 0.3;
+        } else {
+          textOpacity = 1;
+        }
+
+        gsap.set(text, { opacity: clamp(textOpacity, 0, 1) });
+
+        // Word reveal for entering text
+        if (slideProgress > 0.1 && slideProgress < 0.5) {
+          const reveal = (slideProgress - 0.1) / 0.4;
+          const count = words.length || 1;
+          words.forEach((w, wi) => {
+            const threshold = wi / count;
+            const wordT = clamp((reveal - threshold) * 4, 0, 1);
+            w.style.opacity = String(0.28 + wordT * 0.72);
+          });
+        } else if (slideProgress >= 0.5) {
+          words.forEach((w) => { w.style.opacity = "1"; });
+        } else {
+          words.forEach((w) => { w.style.opacity = "0.28"; });
+        }
       }
 
-      const activeIndex = clamp(Math.round(p - 0.5), 0, total - 1);
-      setActiveIndex(activeIndex);
+      // Update number
+      const activeIndex = clamp(Math.floor(p), 0, total - 1);
+      if (activeIndex !== currentIndexRef.current) {
+        currentIndexRef.current = activeIndex;
+        const item = ITEMS[activeIndex];
+        if (item && numberOnesRef.current) {
+          const lastDigit = item.number.slice(-1);
+          if (reduceMotion) {
+            numberOnesRef.current.textContent = lastDigit;
+          } else {
+            gsap.fromTo(numberOnesRef.current,
+              { yPercent: 40, opacity: 0 },
+              { yPercent: 0, opacity: 1, duration: 0.45, ease: "power3.out",
+                onStart: () => { if (numberOnesRef.current) numberOnesRef.current.textContent = lastDigit; }
+              }
+            );
+          }
+          if (numberTickRef.current && !reduceMotion) {
+            gsap.fromTo(numberTickRef.current,
+              { scaleX: 0 },
+              { scaleX: 1, duration: 0.5, ease: "power2.out", transformOrigin: "left" }
+            );
+          }
+        }
+      }
     };
 
+    // Initial state
     updateScene(0);
-    setActiveIndex(0);
 
-    let st;
-    let navSt;
+    let st: ScrollTrigger | undefined;
+    let navSt: ScrollTrigger | undefined;
 
     if (reduceMotion) {
       cardRefs.current.forEach((c, i) =>
-        gsap.set(c, { opacity: i === 0 ? 1 : 0, xPercent: -50, yPercent: -50, rotate: 0, scale: 1 })
+        gsap.set(c, { opacity: i === 0 ? 1 : 0, yPercent: 0, scale: 1 })
       );
       textRefs.current.forEach((t, i) => gsap.set(t, { opacity: i === 0 ? 1 : 0 }));
     } else {
@@ -188,7 +190,7 @@ export default function TeamScrollSection() {
         end: "bottom bottom",
         pin: stageRef.current,
         pinSpacing: false,
-        scrub: true,
+        scrub: 1,
         onUpdate: (self) => updateScene(self.progress),
       });
 
@@ -218,10 +220,39 @@ export default function TeamScrollSection() {
       style={{
         position: "relative",
         width: "100%",
-        background: "#0a1628",
+        background: "#1a1a3e",
         height: `${ITEMS.length * 100}vh`,
       }}
     >
+      {/* Header */}
+      <header
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "24px 40px",
+          zIndex: 300,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255,255,255,0.7)", fontSize: "12px", fontWeight: 400, letterSpacing: "0.05em", cursor: "pointer" }}>
+          <span style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+            <span style={{ display: "block", width: "14px", height: "1px", background: "currentColor" }} />
+            <span style={{ display: "block", width: "14px", height: "1px", background: "currentColor" }} />
+          </span>
+          <span>Menu</span>
+        </div>
+        <div style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.9)", letterSpacing: "0.02em" }}>
+          fromanother
+        </div>
+        <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "12px", fontWeight: 400, letterSpacing: "0.05em", cursor: "pointer" }}>
+          Let's chat →
+        </div>
+      </header>
+
       <div
         ref={stageRef}
         style={{
@@ -229,7 +260,7 @@ export default function TeamScrollSection() {
           width: "100%",
           height: "100vh",
           overflow: "hidden",
-          background: "#0a1628",
+          background: "#1a1a3e",
         }}
       >
         {/* Side Nav */}
@@ -258,37 +289,11 @@ export default function TeamScrollSection() {
               <li key={n} style={{ display: "flex", alignItems: "center" }}>
                 {i === ACTIVE_NAV_INDEX ? (
                   <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <span
-                      style={{
-                        display: "block",
-                        width: "16px",
-                        height: "1px",
-                        background: "rgba(212,175,55,0.8)",
-                      }}
-                    />
-                    <span
-                      style={{
-                        color: "rgba(212,175,55,0.9)",
-                        fontSize: "11px",
-                        fontWeight: 400,
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      {ACTIVE_NAV_LABEL}
-                    </span>
+                    <span style={{ display: "block", width: "16px", height: "1px", background: "rgba(212,175,55,0.8)" }} />
+                    <span style={{ color: "rgba(212,175,55,0.9)", fontSize: "11px", fontWeight: 400, letterSpacing: "0.05em" }}>{ACTIVE_NAV_LABEL}</span>
                   </span>
                 ) : (
-                  <span
-                    style={{
-                      color: "rgba(255,255,255,0.25)",
-                      fontSize: "11px",
-                      fontWeight: 400,
-                      letterSpacing: "0.05em",
-                      fontVariantNumeric: "tabular-nums",
-                    }}
-                  >
-                    {n}
-                  </span>
+                  <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", fontWeight: 400, letterSpacing: "0.05em", fontVariantNumeric: "tabular-nums" }}>{n}</span>
                 )}
               </li>
             ))}
@@ -296,119 +301,53 @@ export default function TeamScrollSection() {
         </nav>
 
         {/* Big Number */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            bottom: "40px",
-            left: "40px",
-            zIndex: 200,
-          }}
-        >
-          <span
-            ref={numberTickRef}
-            style={{
-              position: "absolute",
-              top: "-8px",
-              left: 0,
-              width: "40px",
-              height: "2px",
-              background: "rgba(212,175,55,0.8)",
-              transformOrigin: "left center",
-            }}
-          />
-          <span
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              fontSize: "clamp(80px, 12vw, 160px)",
-              fontWeight: 300,
-              lineHeight: 0.85,
-              color: "rgba(255,255,255,0.15)",
-              fontVariantNumeric: "tabular-nums",
-              letterSpacing: "-0.04em",
-            }}
-          >
+        <div aria-hidden="true" style={{ position: "absolute", bottom: "40px", left: "40px", zIndex: 200 }}>
+          <span ref={numberTickRef} style={{ position: "absolute", top: "-8px", left: 0, width: "40px", height: "2px", background: "rgba(212,175,55,0.8)", transformOrigin: "left center" }} />
+          <span style={{ display: "flex", alignItems: "baseline", fontSize: "clamp(100px, 14vw, 200px)", fontWeight: 300, lineHeight: 0.85, color: "rgba(255,255,255,0.15)", fontVariantNumeric: "tabular-nums", letterSpacing: "-0.04em" }}>
             <span>0</span>
-            <span
-              ref={numberOnesRef}
-              style={{ display: "inline-block", color: "rgba(255,255,255,0.65)" }}
-            >
-              1
-            </span>
+            <span ref={numberOnesRef} style={{ display: "inline-block", color: "rgba(255,255,255,0.65)" }}>1</span>
           </span>
         </div>
 
-        {/* Image Cards */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 10,
-            pointerEvents: "none",
-          }}
-        >
+        {/* Image Cards — centered, stacked from bottom */}
+        <div style={{ position: "absolute", inset: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
           {ITEMS.map((item, i) => (
             <figure
               key={item.number}
-              ref={(el) => {
-                if (el) cardRefs.current[i] = el;
-              }}
+              ref={(el) => { if (el) cardRefs.current[i] = el; }}
               style={{
                 position: "absolute",
                 top: "50%",
                 left: "50%",
-                width: "clamp(280px, 32vw, 480px)",
-                aspectRatio: "3 / 4",
+                width: "clamp(320px, 36vw, 520px)",
+                aspectRatio: "4 / 3",
                 margin: 0,
                 padding: 0,
                 transform: "translate(-50%, -50%)",
                 willChange: "transform, opacity",
                 pointerEvents: "auto",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+                overflow: "hidden",
               }}
             >
               <img
                 src={item.image}
                 alt=""
                 draggable={false}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                }}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
               />
             </figure>
           ))}
         </div>
 
         {/* Text Copy */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            width: "40%",
-            zIndex: 20,
-            pointerEvents: "none",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingRight: "60px",
-          }}
-        >
+        <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "40%", zIndex: 20, pointerEvents: "none", display: "flex", alignItems: "center", justifyContent: "center", paddingRight: "60px" }}>
           {ITEMS.map((item, i) => (
             <p
               key={item.number}
-              ref={(el) => {
-                if (el) textRefs.current[i] = el;
-              }}
+              ref={(el) => { if (el) textRefs.current[i] = el; }}
               style={{
                 position: "absolute",
-                top: "50%",
-                right: "60px",
-                transform: "translateY(-50%)",
                 maxWidth: "320px",
                 margin: 0,
                 padding: 0,
@@ -424,6 +363,9 @@ export default function TeamScrollSection() {
             </p>
           ))}
         </div>
+
+        {/* Bottom gradient hint */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: "linear-gradient(to top, rgba(26,26,62,0.8), transparent)", zIndex: 50, pointerEvents: "none" }} />
       </div>
     </section>
   );
