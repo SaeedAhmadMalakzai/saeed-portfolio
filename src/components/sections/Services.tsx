@@ -1,371 +1,333 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { useRef, useEffect, useState, useCallback } from "react";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ITEMS = [
+const services = [
   {
-    number: "01",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
-    text: "What started in China as a creative partnership which became the foundation of everything we've built. The curiosity never stops there.",
+    id: "01",
+    title: "Brand",
+    titleLine2: "Strategy",
+    description:
+      "We make your company recognizable and memorable against the background of competitors.",
+    tags: ["Research", "Identity", "Positioning", "Guidelines"],
+    image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&q=80&auto=format",
   },
   {
-    number: "02",
-    image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=1200&auto=format&fit=crop",
-    text: "Saigon is where we found our footing. Fast, ambitious, never satisfied — shaped how we work and what we expect from ourselves.",
+    id: "02",
+    title: "Interface",
+    titleLine2: "Design",
+    description:
+      "We consider user interaction with the interface. We pay special attention to hypothesis testing.",
+    tags: ["UX Research", "Wireframing", "Prototyping", "Testing"],
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80&auto=format",
   },
   {
-    number: "03",
-    image: "https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?q=80&w=1200&auto=format&fit=crop",
-    text: "But good work doesn't stay in one place — and neither did we. We go wherever the next brief takes us.",
+    id: "03",
+    title: "Website",
+    titleLine2: "Design",
+    description:
+      "We create a functional design in the style of aesthetics of minimalism with micro animations.",
+    tags: ["Responsive", "Motion", "CMS", "SEO"],
+    image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&q=80&auto=format",
   },
   {
-    number: "04",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop",
-    text: "The offices gave us roots in new places. The people gave us reasons to keep going.",
+    id: "04",
+    title: "Mobile",
+    titleLine2: "Design",
+    description:
+      "We create applications of any complexity for iOS, Android with built-in interactive logic.",
+    tags: ["iOS", "Android", "React Native", "Flutter"],
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80&auto=format",
   },
 ];
 
-const NAV_INDEX = ["01", "02", "03", "04", "05", "06", "07"];
-const ACTIVE_NAV_INDEX = 3;
-const ACTIVE_NAV_LABEL = "Our team";
+export default function ServicesSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const indicatorRef = useRef<HTMLDivElement>(null);
+  const cursorImageRef = useRef<HTMLDivElement>(null);
+  const cursorInnerRef = useRef<HTMLDivElement>(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const isInSection = useRef(false);
+  const mousePos = useRef({ x: 0, y: 0 });
 
-const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    mousePos.current = { x: e.clientX, y: e.clientY };
+    if (cursorImageRef.current) {
+      gsap.to(cursorImageRef.current, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    }
+  }, []);
 
-export default function TeamScrollSection() {
-  const wrapperRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLElement | null)[]>([]);
-  const textRefs = useRef<(HTMLParagraphElement | null)[]>([]);
-  const wordRefs = useRef<HTMLSpanElement[][]>([]);
-  const numberOnesRef = useRef<HTMLSpanElement>(null);
-  const numberTickRef = useRef<HTMLSpanElement>(null);
-  const navTickRef = useRef<HTMLElement>(null);
-  const currentIndexRef = useRef(-1);
+  const handleCardEnter = useCallback((image: string) => {
+    if (!cursorImageRef.current || !cursorInnerRef.current) return;
+
+    // If already showing an image, crossfade to new one
+    if (activeImage && activeImage !== image) {
+      // Fade out current image
+      gsap.to(cursorInnerRef.current, {
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.2,
+        ease: "power2.in",
+        onComplete: () => {
+          setActiveImage(image);
+          // Fade in new image
+          gsap.fromTo(cursorInnerRef.current,
+            { opacity: 0, scale: 0.9 },
+            { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
+          );
+        },
+      });
+    } else {
+      // First time showing image
+      setActiveImage(image);
+      gsap.to(cursorImageRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    }
+  }, [activeImage]);
+
+  const handleSectionLeave = useCallback(() => {
+    isInSection.current = false;
+    if (cursorImageRef.current) {
+      gsap.to(cursorImageRef.current, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => setActiveImage(null),
+      });
+    }
+  }, []);
+
+  const handleSectionEnter = useCallback(() => {
+    isInSection.current = true;
+  }, []);
 
   useEffect(() => {
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const total = ITEMS.length;
+    const section = sectionRef.current;
+    const cardEls = cardsRef.current.filter(Boolean);
+    const indicator = indicatorRef.current;
 
-    // Split text into word spans
-    wordRefs.current = [];
-    textRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const words = ITEMS[i].text.split(" ");
-      el.innerHTML = words
-        .map((w) => `<span style="display:inline-block;margin-right:0.25em;opacity:0.28;">${w}</span>`)
-        .join(" ");
-      wordRefs.current[i] = Array.from(el.querySelectorAll("span"));
-    });
+    if (!section || cardEls.length === 0 || !indicator) return;
 
-    const updateScene = (progress: number) => {
-      const p = progress * total; // 0 to 4
+    const ctx = gsap.context(() => {
+      // Set initial states
+      cardEls.forEach((card) => {
+        if (!card) return;
+        const num = card.querySelector('.service-num') as HTMLElement;
+        const title1 = card.querySelector('.title-line-1') as HTMLElement;
+        const title2 = card.querySelector('.title-line-2') as HTMLElement;
+        const desc = card.querySelector('.service-desc') as HTMLElement;
+        const tags = card.querySelectorAll('.service-tag');
 
-      for (let i = 0; i < total; i++) {
-        const card = cardRefs.current[i];
-        const text = textRefs.current[i];
-        const words = wordRefs.current[i] || [];
-
-        if (!card || !text) continue;
-
-        // Each slide gets 1 unit of progress
-        // Slide i is active when p is between i and i+1
-        const slideProgress = p - i; // 0 when slide starts, 0.5 when centered, 1 when ended
-
-        let yOffset: number;
-        let scale: number;
-        let opacity: number;
-        let zIndex: number;
-
-        if (slideProgress < 0) {
-          // Card is below viewport, waiting to enter
-          yOffset = 80;
-          scale = 0.7;
-          opacity = 0;
-          zIndex = i;
-        } else if (slideProgress < 0.5) {
-          // Card is entering from bottom
-          const enterProgress = slideProgress / 0.5;
-          yOffset = 80 - (enterProgress * 80);
-          scale = 0.7 + (enterProgress * 0.3);
-          opacity = enterProgress;
-          zIndex = i + 10;
-        } else if (slideProgress < 1) {
-          // Card is being covered by next (exiting to top)
-          const exitProgress = (slideProgress - 0.5) / 0.5;
-          yOffset = -exitProgress * 20;
-          scale = 1.0 - (exitProgress * 0.05);
-          opacity = 1 - (exitProgress * 0.3);
-          zIndex = i;
-        } else {
-          // Card is stacked above
-          yOffset = -20 - ((slideProgress - 1) * 5);
-          scale = 0.95 - ((slideProgress - 1) * 0.02);
-          opacity = 0.7 - ((slideProgress - 1) * 0.1);
-          zIndex = i;
-        }
-
-        gsap.set(card, {
-          yPercent: yOffset,
-          scale: clamp(scale, 0.5, 1.2),
-          opacity: clamp(opacity, 0, 1),
-          zIndex: zIndex,
-        });
-
-        // Text animation
-        let textOpacity: number;
-        if (slideProgress < 0.1) {
-          textOpacity = 0;
-        } else if (slideProgress < 0.3) {
-          textOpacity = (slideProgress - 0.1) / 0.2;
-        } else if (slideProgress > 0.7) {
-          textOpacity = 1 - (slideProgress - 0.7) / 0.3;
-        } else {
-          textOpacity = 1;
-        }
-
-        gsap.set(text, { opacity: clamp(textOpacity, 0, 1) });
-
-        // Word reveal for entering text
-        if (slideProgress > 0.1 && slideProgress < 0.5) {
-          const reveal = (slideProgress - 0.1) / 0.4;
-          const count = words.length || 1;
-          words.forEach((w, wi) => {
-            const threshold = wi / count;
-            const wordT = clamp((reveal - threshold) * 4, 0, 1);
-            w.style.opacity = String(0.28 + wordT * 0.72);
-          });
-        } else if (slideProgress >= 0.5) {
-          words.forEach((w) => { w.style.opacity = "1"; });
-        } else {
-          words.forEach((w) => { w.style.opacity = "0.28"; });
-        }
-      }
-
-      // Update number
-      const activeIndex = clamp(Math.floor(p), 0, total - 1);
-      if (activeIndex !== currentIndexRef.current) {
-        currentIndexRef.current = activeIndex;
-        const item = ITEMS[activeIndex];
-        if (item && numberOnesRef.current) {
-          const lastDigit = item.number.slice(-1);
-          if (reduceMotion) {
-            numberOnesRef.current.textContent = lastDigit;
-          } else {
-            gsap.fromTo(numberOnesRef.current,
-              { yPercent: 40, opacity: 0 },
-              { yPercent: 0, opacity: 1, duration: 0.45, ease: "power3.out",
-                onStart: () => { if (numberOnesRef.current) numberOnesRef.current.textContent = lastDigit; }
-              }
-            );
-          }
-          if (numberTickRef.current && !reduceMotion) {
-            gsap.fromTo(numberTickRef.current,
-              { scaleX: 0 },
-              { scaleX: 1, duration: 0.5, ease: "power2.out", transformOrigin: "left" }
-            );
-          }
-        }
-      }
-    };
-
-    // Initial state
-    updateScene(0);
-
-    let st: ScrollTrigger | undefined;
-    let navSt: ScrollTrigger | undefined;
-
-    if (reduceMotion) {
-      cardRefs.current.forEach((c, i) =>
-        gsap.set(c, { opacity: i === 0 ? 1 : 0, yPercent: 0, scale: 1 })
-      );
-      textRefs.current.forEach((t, i) => gsap.set(t, { opacity: i === 0 ? 1 : 0 }));
-    } else {
-      st = ScrollTrigger.create({
-        trigger: wrapperRef.current,
-        start: "top top",
-        end: "bottom bottom",
-        pin: stageRef.current,
-        pinSpacing: false,
-        scrub: 1,
-        onUpdate: (self) => updateScene(self.progress),
+        gsap.set(num, { y: 30, opacity: 0 });
+        gsap.set(title1, { y: "100%" });
+        gsap.set(title2, { y: "100%" });
+        gsap.set(desc, { y: 40, opacity: 0 });
+        gsap.set(tags, { y: 15, opacity: 0, scale: 0.9 });
       });
 
-      if (navTickRef.current) {
-        gsap.set(navTickRef.current, { opacity: 0 });
-        navSt = ScrollTrigger.create({
-          trigger: wrapperRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          onEnter: () => gsap.to(navTickRef.current, { opacity: 1, duration: 0.4 }),
-          onLeave: () => gsap.to(navTickRef.current, { opacity: 0, duration: 0.4 }),
-          onEnterBack: () => gsap.to(navTickRef.current, { opacity: 1, duration: 0.4 }),
-          onLeaveBack: () => gsap.to(navTickRef.current, { opacity: 0, duration: 0.4 }),
-        });
-      }
-    }
+      // ScrollTrigger for each card
+      cardEls.forEach((card) => {
+        if (!card) return;
+        const num = card.querySelector('.service-num') as HTMLElement;
+        const title1 = card.querySelector('.title-line-1') as HTMLElement;
+        const title2 = card.querySelector('.title-line-2') as HTMLElement;
+        const desc = card.querySelector('.service-desc') as HTMLElement;
+        const tags = card.querySelectorAll('.service-tag');
 
-    return () => {
-      st && st.kill();
-      navSt && navSt.kill();
-    };
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            end: "top 45%",
+            scrub: 0.5,
+          },
+        });
+
+        tl.to(num, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 0);
+        tl.to(title1, { y: "0%", duration: 0.5, ease: "power3.out" }, 0.05);
+        tl.to(title2, { y: "0%", duration: 0.5, ease: "power3.out" }, 0.12);
+        tl.to(desc, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.2);
+
+        tags.forEach((tag: Element, ti: number) => {
+          tl.to(tag, {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.25,
+            ease: "power3.out",
+          }, 0.3 + ti * 0.05);
+        });
+      });
+
+      // Indicator follows scroll
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top center",
+        end: "bottom center",
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const activeIndex = Math.min(
+            Math.floor(progress * cardEls.length),
+            cardEls.length - 1
+          );
+          const activeCard = cardEls[activeIndex];
+          if (activeCard) {
+            const cardRect = activeCard.getBoundingClientRect();
+            const sectionRect = section.getBoundingClientRect();
+            const relativeTop = cardRect.top - sectionRect.top + cardRect.height / 2;
+            gsap.set(indicator, { y: relativeTop });
+          }
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
-      ref={wrapperRef}
-      style={{
-        position: "relative",
-        width: "100%",
-        background: "#1a1a3e",
-        height: `${ITEMS.length * 100}vh`,
-      }}
+      ref={sectionRef}
+      className="relative bg-white py-20 lg:py-32"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleSectionEnter}
+      onMouseLeave={handleSectionLeave}
     >
-      {/* Header */}
-      <header
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "24px 40px",
-          zIndex: 300,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255,255,255,0.7)", fontSize: "12px", fontWeight: 400, letterSpacing: "0.05em", cursor: "pointer" }}>
-          <span style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-            <span style={{ display: "block", width: "14px", height: "1px", background: "currentColor" }} />
-            <span style={{ display: "block", width: "14px", height: "1px", background: "currentColor" }} />
-          </span>
-          <span>Menu</span>
-        </div>
-        <div style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.9)", letterSpacing: "0.02em" }}>
-          fromanother
-        </div>
-        <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "12px", fontWeight: 400, letterSpacing: "0.05em", cursor: "pointer" }}>
-          Let's chat →
-        </div>
-      </header>
-
+      {/* Cursor-following image with corner brackets */}
       <div
-        ref={stageRef}
+        ref={cursorImageRef}
+        className="fixed z-50 pointer-events-none"
         style={{
-          position: "relative",
-          width: "100%",
-          height: "100vh",
-          overflow: "hidden",
-          background: "#1a1a3e",
+          transform: "translate(-50%, -50%) scale(0.8)",
+          left: 0,
+          top: 0,
+          opacity: 0,
         }}
       >
-        {/* Side Nav */}
-        <nav
-          ref={navTickRef}
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            left: "40px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            zIndex: 200,
-          }}
-        >
-          <ol
-            style={{
-              listStyle: "none",
-              margin: 0,
-              padding: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: "18px",
-            }}
-          >
-            {NAV_INDEX.map((n, i) => (
-              <li key={n} style={{ display: "flex", alignItems: "center" }}>
-                {i === ACTIVE_NAV_INDEX ? (
-                  <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <span style={{ display: "block", width: "16px", height: "1px", background: "rgba(212,175,55,0.8)" }} />
-                    <span style={{ color: "rgba(212,175,55,0.9)", fontSize: "11px", fontWeight: 400, letterSpacing: "0.05em" }}>{ACTIVE_NAV_LABEL}</span>
-                  </span>
-                ) : (
-                  <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", fontWeight: 400, letterSpacing: "0.05em", fontVariantNumeric: "tabular-nums" }}>{n}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
-
-        {/* Big Number */}
-        <div aria-hidden="true" style={{ position: "absolute", bottom: "40px", left: "40px", zIndex: 200 }}>
-          <span ref={numberTickRef} style={{ position: "absolute", top: "-8px", left: 0, width: "40px", height: "2px", background: "rgba(212,175,55,0.8)", transformOrigin: "left center" }} />
-          <span style={{ display: "flex", alignItems: "baseline", fontSize: "clamp(100px, 14vw, 200px)", fontWeight: 300, lineHeight: 0.85, color: "rgba(255,255,255,0.15)", fontVariantNumeric: "tabular-nums", letterSpacing: "-0.04em" }}>
-            <span>0</span>
-            <span ref={numberOnesRef} style={{ display: "inline-block", color: "rgba(255,255,255,0.65)" }}>1</span>
+        <div ref={cursorInnerRef} className="relative">
+          {/* Corner brackets */}
+          <span className="absolute -left-2 -top-2 text-zinc-800 z-20">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 6L1 1L6 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
           </span>
+          <span className="absolute -right-2 -top-2 text-zinc-800 z-20">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M15 6L15 1L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </span>
+          <span className="absolute -right-2 -bottom-2 text-zinc-800 z-20">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M15 10L15 15L10 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </span>
+          <span className="absolute -left-2 -bottom-2 text-zinc-800 z-20">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 10L1 15L6 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </span>
+
+          {activeImage && (
+            <img
+              src={activeImage}
+              alt=""
+              className="w-44 h-32 lg:w-52 lg:h-36 object-cover"
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Red cube indicator */}
+      <div
+        ref={indicatorRef}
+        className="absolute left-6 lg:left-10 z-40 h-2 w-2 bg-[#e74c3c]"
+        style={{ top: 0 }}
+      />
+
+      <div className="max-w-6xl mx-auto px-6 lg:px-12">
+        {/* Section Header */}
+        <div className="mb-16 lg:mb-24">
+          <h2 className="text-4xl lg:text-5xl font-light tracking-tight text-black leading-[1.05]">
+            Our Services.
+          </h2>
+          <p className="text-xs text-gray-400 mt-3 font-mono tracking-wider">
+            What we do best.
+          </p>
         </div>
 
-        {/* Image Cards — centered, stacked from bottom */}
-        <div style={{ position: "absolute", inset: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-          {ITEMS.map((item, i) => (
-            <figure
-              key={item.number}
-              ref={(el) => { if (el) cardRefs.current[i] = el; }}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                width: "clamp(320px, 36vw, 520px)",
-                aspectRatio: "4 / 3",
-                margin: 0,
-                padding: 0,
-                transform: "translate(-50%, -50%)",
-                willChange: "transform, opacity",
-                pointerEvents: "auto",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
-                overflow: "hidden",
-              }}
+        {/* Services Grid - 2 per row */}
+        <div className="grid grid-cols-2 gap-x-8 lg:gap-x-16">
+          {services.map((service, i) => (
+            <div
+              key={service.id}
+              ref={(el) => { cardsRef.current[i] = el; }}
+              className="group border-t border-black/10 py-10 lg:py-14 cursor-pointer"
+              onMouseEnter={() => handleCardEnter(service.image)}
             >
-              <img
-                src={item.image}
-                alt=""
-                draggable={false}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
-            </figure>
+              <div className="flex items-start gap-4 lg:gap-6">
+                {/* Number in Cube */}
+                <div className="flex-shrink-0">
+                  <div className="overflow-hidden">
+                    <div className="service-num flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 border border-black/20 will-change-transform">
+                      <span className="text-xs lg:text-sm font-mono text-black tracking-wider">
+                        {service.id}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                  {/* Title */}
+                  <div className="overflow-hidden">
+                    <h3 className="title-line-1 text-2xl lg:text-4xl xl:text-5xl font-light leading-[1.05] tracking-tight text-black will-change-transform">
+                      {service.title}
+                    </h3>
+                  </div>
+                  <div className="overflow-hidden">
+                    <h3 className="title-line-2 text-2xl lg:text-4xl xl:text-5xl font-light leading-[1.05] tracking-tight text-zinc-500 will-change-transform">
+                      {service.titleLine2}
+                    </h3>
+                  </div>
+
+                  {/* Description */}
+                  <p className="service-desc text-xs lg:text-sm text-gray-500 leading-relaxed mt-4 max-w-xs will-change-transform">
+                    {service.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mt-5">
+                    {service.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="service-tag px-2.5 py-1 text-[10px] font-mono text-gray-600 bg-black/[0.03] border border-black/[0.08] rounded-full will-change-transform"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* Text Copy */}
-        <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "40%", zIndex: 20, pointerEvents: "none", display: "flex", alignItems: "center", justifyContent: "center", paddingRight: "60px" }}>
-          {ITEMS.map((item, i) => (
-            <p
-              key={item.number}
-              ref={(el) => { if (el) textRefs.current[i] = el; }}
-              style={{
-                position: "absolute",
-                maxWidth: "320px",
-                margin: 0,
-                padding: 0,
-                color: "rgba(255,255,255,0.85)",
-                fontSize: "clamp(14px, 1.2vw, 18px)",
-                lineHeight: 1.6,
-                fontWeight: 300,
-                letterSpacing: "0.01em",
-                willChange: "opacity",
-              }}
-            >
-              {item.text}
-            </p>
-          ))}
-        </div>
-
-        {/* Bottom gradient hint */}
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: "linear-gradient(to top, rgba(26,26,62,0.8), transparent)", zIndex: 50, pointerEvents: "none" }} />
+        {/* Bottom border */}
+        <div className="border-t border-black/10" />
       </div>
     </section>
   );
