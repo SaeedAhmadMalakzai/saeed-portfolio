@@ -332,7 +332,7 @@ export function ProjectsPreview() {
 
           <div className="flex items-center gap-2">
             {projects.map((_, i) => (
-              <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-black scale-110' : 'bg-black/25'}`} />
+              <div key={i} className={`w-1.5 h-1.5  transition-all duration-300 ${i === currentIndex ? 'bg-black scale-110' : 'bg-black/25'}`} />
             ))}
           </div>
 
