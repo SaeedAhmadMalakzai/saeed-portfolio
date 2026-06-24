@@ -85,7 +85,7 @@ function CornerBracket({ position }: { position: "tl" | "tr" | "bl" | "br" }) {
 
   return (
     <span
-      className="absolute text-black transition-colors duration-300 group-hover:text-green-500"
+      className="absolute text-black opacity-0 scale-50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100"
       style={{
         transform: `rotate(${rotations[position]})`,
         ...(position === "tl" && { top: "-4px", left: "-4px" }),
@@ -94,7 +94,7 @@ function CornerBracket({ position }: { position: "tl" | "tr" | "bl" | "br" }) {
         ...(position === "br" && { bottom: "-4px", right: "-4px" }),
       }}
     >
-      <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
         <path
           d="M1 6L1 1L6 1"
           stroke="currentColor"
@@ -133,22 +133,27 @@ export function Skills() {
   return (
     <section id="skills" className="bg-white py-24 text-black">
       <div className="mx-auto max-w-7xl px-6">
-        <motion.p
+        {/* Title - styled like About */}
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-xs font-medium uppercase tracking-[0.15em] text-neutral-500"
+          className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-[0.15em] text-center mb-12"
+          style={{
+            fontFamily: '"Nepos Simplex Solid", "Nepos Simplex", sans-serif',
+            color: "#000",
+          }}
         >
           Skills & Technologies
-        </motion.p>
+        </motion.h2>
 
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="mt-6 flex flex-wrap gap-4"
+          className="flex flex-wrap justify-center gap-3"
         >
           {skills.map((skill) => {
             const Icon = skill.icon;
@@ -156,7 +161,8 @@ export function Skills() {
               <motion.span
                 key={skill.name}
                 variants={itemVariants}
-                className="group relative inline-flex cursor-default items-center gap-2 bg-green-500/10 px-4 py-2 text-sm font-medium text-black backdrop-blur-sm transition-all duration-300 hover:bg-transparent"
+                className="group relative inline-flex cursor-default items-center gap-2 px-4 py-2 text-sm font-medium text-black transition-all duration-300 hover:bg-transparent"
+                style={{ backgroundColor: "#e8e8e3" }}
               >
                 <CornerBracket position="tl" />
                 <CornerBracket position="tr" />
