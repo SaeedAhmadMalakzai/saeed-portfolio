@@ -14,7 +14,7 @@ const processes = [
     title: "Discovery & Strategy",
     description:
       "I start by understanding your goals, users, and constraints. Through research and planning, I define a clear roadmap that aligns technology with business outcomes — so every decision is intentional.",
-    image: "/images/process-1.jpg",
+    image: "/images/p1.png",
   },
   {
     id: 2,
@@ -320,12 +320,12 @@ export function Process() {
                 onClick={() => goToStep(i)}
                 className="step-indicator group pt-14 relative flex items-center gap-3 py-3"
               >
-                {/* Icon container */}
+                {/* Icon container - black box like About section */}
                 <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-500 ${
+                  className={`flex h-10 w-10 items-center justify-center transition-all duration-500 ${
                     i === currentIndex
                       ? "bg-black"
-                      : "bg-transparent border border-black/10 hover:border-black/30"
+                      : "bg-black border border-black/10 hover:border-black/30"
                   }`}
                 >
                   <Image
@@ -333,9 +333,8 @@ export function Process() {
                     alt={process.title}
                     width={20}
                     height={20}
-                    className={`transition-all duration-500 ${
-                      i === currentIndex ? "invert" : "opacity-40 group-hover:opacity-70"
-                    }`}
+                    className="w-5 h-5 transition-all duration-500"
+                    style={{ filter: "brightness(0) invert(1)" }}
                   />
                 </div>
 
@@ -383,13 +382,15 @@ export function Process() {
                       visibility: i === currentIndex ? "visible" : "hidden",
                     }}
                   >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black">
+                    {/* Black box with white icon like About section */}
+                    <div className="flex h-14 w-14 items-center justify-center bg-black">
                       <Image
                         src={process.icon}
                         alt={process.title}
                         width={24}
                         height={24}
-                        className="invert"
+                        className="w-6 h-6"
+                        style={{ filter: "brightness(0) invert(1)" }}
                       />
                     </div>
                   </div>
@@ -486,7 +487,7 @@ export function Process() {
 
         {/* Scroll hint - bottom center */}
         <div className="absolute bottom-8 left-0 right-0 z-30 flex flex-col items-center gap-2">
-          <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-black/30">
+          <span className="text-[10px] font-medium uppercase tracking-[0.2em] ">
             {currentIndex < processes.length - 1 ? "Scroll to explore" : "End of process"}
           </span>
           {currentIndex < processes.length - 1 && (
