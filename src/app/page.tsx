@@ -5,7 +5,6 @@ import { Process } from "@/components/sections/Process";
 import { Hero } from "@/components/sections/Hero";
 import { ProjectsPreview } from "@/components/sections/ProjectsPreview";
 import { Skills } from "@/components/sections/Skills";
-// import Bg from "@/components/sections/Bg";
 
 export default function Home() {
   return (
@@ -18,7 +17,7 @@ export default function Home() {
       <Process />
       
       <Contact />
-      {/* <Bg/> */}
+      
     </main>
   );
 }
