@@ -6,7 +6,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 /**
  * 3D Isometric CD Logo
  * Based on Figma extrude-group.svg export
- * Animations: draw-on reveal, 3D tilt on hover, floating idle, ambient particles
+ * Animations: draw-on reveal, 3D tilt on hover, floating idle
  */
 export function Isometric() {
   const id = useId();
@@ -111,32 +111,12 @@ export function Isometric() {
         viewBox="0 0 297 195"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full max-w-[500px] h-auto"
+        className="w-full max-w-[720px] h-auto"
         style={{ y: floatY }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <defs>
-          {/* Diagonal hatching pattern */}
-          <pattern
-            id={`hatch-${id}`}
-            width="6"
-            height="6"
-            patternUnits="userSpaceOnUse"
-            patternTransform="rotate(45)"
-          >
-            <line
-              x1="0"
-              y1="0"
-              x2="0"
-              y2="6"
-              stroke="rgba(0,0,0,0.15)"
-              strokeWidth="0.7"
-            />
-          </pattern>
-        </defs>
-
         {/* Silhouette (black fill behind) */}
         <motion.path
           d={silhouette}
@@ -146,17 +126,16 @@ export function Isometric() {
           transition={{ duration: 0.8, delay: 0.2 }}
         />
 
-        {/* Extruded faces with hatching */}
+        {/* Extruded faces — solid subtle fill, no hatch lines */}
         {faces.map((face, i) => (
           <motion.path
             key={i}
             d={face.d}
-            fill={`url(#hatch-${id})`}
-            fillOpacity={0.3}
-            stroke="rgba(0,0,0,0.4)"
+            fill="rgba(0,0,0,0.06)"
+            stroke="rgba(0,0,0,0.35)"
             strokeWidth="0.5"
-            initial={{ pathLength: 0, opacity: 0, fillOpacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1, fillOpacity: 0.3 }}
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
             transition={{
               duration: 1.2,
               delay: face.delay,
@@ -169,7 +148,7 @@ export function Isometric() {
         <motion.path
           d={outline}
           fill="none"
-          stroke="rgba(255,255,255,0.25)"
+          stroke="rgba(0,0,0,0.25)"
           strokeWidth="0.6"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -177,27 +156,6 @@ export function Isometric() {
           animate={{ pathLength: 1, opacity: 1 }}
           transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
         />
-
-        {/* Ambient particles */}
-        {[...Array(5)].map((_, i) => (
-          <motion.circle
-            key={`p-${i}`}
-            cx={50 + i * 50}
-            cy={30 + (i % 2) * 40}
-            r="1"
-            fill="rgba(255,255,255,0.3)"
-            animate={{
-              opacity: [0, 0.5, 0],
-              y: [0, -20, 0],
-            }}
-            transition={{
-              duration: 4 + i,
-              repeat: Infinity,
-              delay: i * 0.7,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
       </motion.svg>
 
       {/* FIG_001 Label */}
@@ -215,7 +173,7 @@ export function Isometric() {
         className="absolute inset-0 rounded-full pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%)",
+            "radial-gradient(circle at center, rgba(0,0,0,0.03) 0%, transparent 70%)",
         }}
         animate={{
           scale: isHovered ? 1.2 : 1,

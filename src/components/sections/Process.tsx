@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cn } from "@/lib/utils";
+import { CheckCircle2, Loader2 } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,9 +32,95 @@ const processes = [
     title: "Develop & Integrate",
     description:
       "I build scalable full-stack solutions, mobile apps, and AI-powered features using modern tech. Clean architecture, real-time systems, and third-party integrations — built to perform and grow.",
-    image: "/images/process-3.jpg",
+    image: null,
   },
 ];
+
+// ─── Display Card Components ─────────────────────────────────────
+
+interface DisplayCardProps {
+  className?: string;
+  icon?: React.ReactNode;
+  title?: string;
+  description?: string;
+  date?: string;
+  iconClassName?: string;
+  titleClassName?: string;
+}
+
+function DisplayCard({
+  className,
+  icon = <CheckCircle2 className="size-4 text-gray-400" />,
+  title = "Featured",
+  description = "Discover amazing content",
+  date = "Just now",
+  iconClassName = "text-gray-300",
+  titleClassName = "text-white",
+}: DisplayCardProps) {
+  return (
+    <div
+      className={cn(
+        "relative flex h-36 w-[22rem] -skew-y-[8deg] select-none flex-col justify-between border border-white/10 bg-black/80 backdrop-blur-md px-4 py-3 transition-all duration-700 after:absolute after:-right-1 after:top-[-5%] after:h-[110%] after:w-[20rem] after:bg-gradient-to-l after:from-background after:to-transparent after:content-[''] hover:border-white/30 hover:bg-black/90 [&>*]:flex [&>*]:items-center [&>*]:gap-2",
+        className
+      )}
+    >
+      <div>
+        <span className="relative inline-block bg-gray-800 p-1">
+          {icon}
+        </span>
+        <p className={cn("text-lg font-medium", titleClassName)}>{title}</p>
+      </div>
+      <p className="whitespace-nowrap text-lg text-gray-300">{description}</p>
+      <p className="text-gray-500">{date}</p>
+    </div>
+  );
+}
+
+// Process-specific card data — gray & black only
+const processCards = [
+  // Card 1 - Process 1 (Discovery & Strategy) - DONE
+  {
+    icon: <CheckCircle2 className="size-4 text-gray-400" />,
+    title: "Discovery Complete",
+    description: "Requirements gathered & roadmap defined",
+    date: "Completed",
+    iconClassName: "text-gray-400",
+    titleClassName: "text-white",
+    className: "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:outline-white/10 before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-black/60 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
+  },
+  // Card 2 - Process 2 (Design & Prototype) - DONE
+  {
+    icon: <CheckCircle2 className="size-4 text-gray-400" />,
+    title: "Design Approved",
+    description: "UI/UX finalized & prototypes signed off",
+    date: "Completed",
+    iconClassName: "text-gray-400",
+    titleClassName: "text-white",
+    className: "[grid-area:stack] translate-x-16 translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:outline-white/10 before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-black/60 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
+  },
+  // Card 3 - Process 3 (Develop & Integrate) - IN PROGRESS
+  {
+    icon: <Loader2 className="size-4 text-gray-300 animate-spin" />,
+    title: "Development",
+    description: "Building scalable full-stack solution",
+    date: "In Progress",
+    iconClassName: "text-gray-300",
+    titleClassName: "text-white",
+    className: "[grid-area:stack] translate-x-32 translate-y-20 hover:translate-y-10",
+  },
+];
+
+function DisplayCards() {
+  return (
+    <div className="grid [grid-template-areas:'stack'] place-items-center opacity-100 animate-in fade-in-0 duration-700">
+      {processCards.map((cardProps, index) => (
+        <DisplayCard key={index} {...cardProps} />
+      ))}
+    </div>
+  );
+}
+
+// ─── Main Process Component ──────────────────────────────────────
 
 export function Process() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -48,7 +136,6 @@ export function Process() {
   const isAnimatingRef = useRef(false);
   const hasEnteredRef = useRef(false);
 
-  // Keep refs in sync with state
   useEffect(() => {
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
@@ -64,7 +151,6 @@ export function Process() {
       setIsAnimating(true);
       const direction = index > currentIndexRef.current ? 1 : -1;
 
-      // Icon animation
       const currentIcon = iconRef.current?.querySelector(
         ".icon-item.active"
       ) as HTMLElement;
@@ -94,7 +180,6 @@ export function Process() {
         );
       }
 
-      // Title animation
       const currentTitle = titleRef.current?.querySelector(
         ".title-item.active"
       ) as HTMLElement;
@@ -124,7 +209,6 @@ export function Process() {
         );
       }
 
-      // Description animation
       const currentDesc = descRef.current?.querySelector(
         ".desc-item.active"
       ) as HTMLElement;
@@ -152,7 +236,6 @@ export function Process() {
         );
       }
 
-      // Image animation
       const currentImage = imageRef.current?.querySelector(
         ".image-item.active"
       ) as HTMLElement;
@@ -190,7 +273,6 @@ export function Process() {
     []
   );
 
-  // Scroll-based navigation using GSAP ScrollTrigger
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -230,7 +312,6 @@ export function Process() {
     };
   }, [goToStep]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown" || e.key === "ArrowRight") goToStep(currentIndexRef.current + 1);
@@ -240,19 +321,16 @@ export function Process() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [goToStep]);
 
-  // Entrance animations - run when section scrolls into view
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // Set initial visible state for the first (active) items
       gsap.set(".icon-item.active", { opacity: 1, y: 0, scale: 1 });
       gsap.set(".title-item.active", { opacity: 1, y: 0, filter: "blur(0px)" });
       gsap.set(".desc-item.active", { opacity: 1, y: 0 });
       gsap.set(".image-item.active", { opacity: 1, scale: 1, x: 0 });
 
-      // Animate in when section enters viewport
       ScrollTrigger.create({
         trigger: section,
         start: "top 80%",
@@ -320,7 +398,6 @@ export function Process() {
                 onClick={() => goToStep(i)}
                 className="step-indicator group pt-14 relative flex items-center gap-3 py-3"
               >
-                {/* Icon container - black box like About section */}
                 <div
                   className={`flex h-10 w-10 items-center justify-center transition-all duration-500 ${
                     i === currentIndex
@@ -338,14 +415,12 @@ export function Process() {
                   />
                 </div>
 
-                {/* Small horizontal line next to active */}
                 <div
                   className={`h-px w-5 transition-all duration-500 ${
                     i === currentIndex ? "bg-black" : "bg-transparent"
                   }`}
                 />
 
-                {/* Vertical connector line */}
                 {i < processes.length - 1 && (
                   <div className="absolute left-5 top-full h-6 w-px bg-black/10">
                     <div
@@ -367,7 +442,6 @@ export function Process() {
 
             {/* Left: Content */}
             <div className="relative" style={{ minHeight: "360px" }}>
-              {/* Icon - always visible, not hidden by scroll */}
               <div ref={iconRef} className="relative mb-10 h-14">
                 {processes.map((process, i) => (
                   <div
@@ -382,7 +456,6 @@ export function Process() {
                       visibility: i === currentIndex ? "visible" : "hidden",
                     }}
                   >
-                    {/* Black box with white icon like About section */}
                     <div className="flex h-14 w-14 items-center justify-center bg-black">
                       <Image
                         src={process.icon}
@@ -397,7 +470,6 @@ export function Process() {
                 ))}
               </div>
 
-              {/* Title */}
               <div ref={titleRef} className="relative mb-8">
                 {processes.map((process, i) => (
                   <div
@@ -429,7 +501,6 @@ export function Process() {
                 ))}
               </div>
 
-              {/* Description */}
               <div ref={descRef} className="relative max-w-md">
                 {processes.map((process, i) => (
                   <div
@@ -459,35 +530,45 @@ export function Process() {
               </div>
             </div>
 
-            {/* Right: Image */}
+            {/* Right: Image (Process 1 & 2) or DisplayCards (Process 3) */}
             <div ref={imageRef} className="relative hidden lg:block">
-              <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden rounded-2xl">
-                {processes.map((process, i) => (
-                  <div
-                    key={process.id}
-                    className={`image-item absolute inset-0 ${i === currentIndex ? "active" : ""}`}
-                    style={{ 
-                      opacity: i === currentIndex ? 1 : 0,
-                      visibility: i === currentIndex ? "visible" : "hidden",
-                    }}
-                  >
-                    <Image
-                      src={process.image}
-                      alt={process.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                ))}
-              </div>
+              {processes.map((process, i) => (
+                <div
+                  key={process.id}
+                  className={`image-item ${i === currentIndex ? "active" : ""}`}
+                  style={{
+                    opacity: i === currentIndex ? 1 : 0,
+                    visibility: i === currentIndex ? "visible" : "hidden",
+                    position: i === currentIndex ? "relative" : "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                  }}
+                >
+                  {process.image ? (
+                    <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden">
+                      <Image
+                        src={process.image}
+                        alt={process.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center">
+                      <DisplayCards />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Scroll hint - bottom center */}
         <div className="absolute bottom-8 left-0 right-0 z-30 flex flex-col items-center gap-2">
-          <span className="text-[10px] font-medium uppercase tracking-[0.2em] ">
+          <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">
             {currentIndex < processes.length - 1 ? "Scroll to explore" : "End of process"}
           </span>
           {currentIndex < processes.length - 1 && (
