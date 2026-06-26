@@ -32,6 +32,8 @@ import {
   SiScikitlearn,
 } from "react-icons/si";
 import { FaDatabase, FaServer, FaCode } from "react-icons/fa";
+import { Variants } from "framer-motion";
+
 
 const skills = [
   { name: "Python", icon: SiPython, color: "#3776AB" },
@@ -124,7 +126,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.4,
-      ease: "easeOut",
+      ease: "easeOut" as const,  // <-- add `as const` here
     },
   },
 };
