@@ -31,13 +31,10 @@ export function Hero() {
       return;
     }
 
-    // Set next image below
     gsap.set(nextEl, { y: "100%" });
 
-    // Animate both
     const tl = gsap.timeline({
       onComplete: () => {
-        // Reset current to below for next cycle
         gsap.set(currentEl, { y: "100%" });
         setCurrentIndex(nextIndex);
         setIsAnimating(false);
@@ -58,7 +55,6 @@ export function Hero() {
 
   }, [currentIndex, isAnimating]);
 
-  // Auto-advance carousel
   useEffect(() => {
     const interval = setInterval(() => {
       goToNext();
@@ -67,7 +63,6 @@ export function Hero() {
     return () => clearInterval(interval);
   }, [goToNext]);
 
-  // Page load animation
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -104,40 +99,40 @@ export function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen px-6 py-12">
+    <section id="hero" className="relative px-4 py-8 sm:px-6 sm:py-12 overflow-hidden">
       <div ref={containerRef} className="relative mx-auto max-w-6xl w-full">
-        
+
         {/* WORK */}
         <div className="flex items-start gap-2">
           <div className="overflow-hidden">
-            <h1 className="hero-text text-[13vw] font-black leading-[0.8] tracking-tighter text-zinc-900 uppercase sm:text-[11vw] lg:text-[10vw]">
+            <h1 className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
               character
             </h1>
           </div>
         </div>
 
         {/* ABOUT */}
-        <div className="relative -mt-2 flex items-center gap-2">
-          <div className="absolute left-0 top-1/2 h-2.5 w-full -translate-y-1/2 bg-white z-10" />
+        <div className="relative -mt-1 sm:-mt-2 flex items-center gap-2">
+          <div className="absolute left-0 top-1/2 h-2 w-full -translate-y-1/2 bg-white z-10" />
           <div className="overflow-hidden">
-            <h2 className="hero-text relative z-0 text-[13vw] font-black leading-[0.8] tracking-tighter text-zinc-900 uppercase sm:text-[11vw] lg:text-[10vw]">
+            <h2 className="hero-text relative z-0 text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
               to systems
             </h2>
           </div>
         </div>
 
         {/* AND - with image carousel */}
-        <div className="relative -mt-2 flex items-start justify-between">
-          <div className="flex items-start gap-2 pl-[15vw]">
+        <div className="relative -mt-1 sm:-mt-2 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-0">
+          <div className="flex items-start gap-2 pl-[10vw] sm:pl-[15vw]">
             <div className="overflow-hidden">
-              <h2 className="hero-text text-[13vw] font-black leading-[0.8] tracking-tighter text-zinc-900 uppercase sm:text-[11vw] lg:text-[10vw]">
+              <h2 className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
                 and 
               </h2>
             </div>
           </div>
 
           {/* Image carousel with slide-up animation */}
-          <div className="hero-image-container relative mt-4 hidden md:block mr-auto ml-8">
+          <div className="hero-image-container relative ml-[10vw] sm:ml-8 sm:mr-auto sm:mt-4 w-[160px] sm:w-[180px] shrink-0">
             {/* Corner brackets */}
             <span className="hero-bracket absolute -left-2 -top-2 text-zinc-400 z-20">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -161,7 +156,7 @@ export function Hero() {
             </span>
 
             {/* Carousel container */}
-            <div className="relative h-27.5 w-45 overflow-hidden">
+            <div className="relative h-[100px] w-[160px] sm:h-[110px] sm:w-[180px] overflow-hidden">
               {images.map((src, i) => (
                 <div
                   key={src}
@@ -174,8 +169,7 @@ export function Hero() {
                   <Image
                     src={src}
                     alt={profile.name}
-                    width={180}
-                    height={140}
+                    fill
                     className="object-cover"
                     priority={i === 0}
                   />
@@ -183,8 +177,8 @@ export function Hero() {
               ))}
             </div>
 
-            {/* Description text beside image */}
-            <div className="hero-desc absolute -right-32 top-0 w-28">
+            {/* Description text beside image — hidden on mobile, shown on sm+ */}
+            <div className="hero-desc hidden sm:block absolute -right-32 top-0 w-28">
               <p className="text-[9px] font-mono leading-tight text-zinc-500">
                 I bring clarity and character
               </p>
@@ -199,9 +193,9 @@ export function Hero() {
         </div>
 
         {/* PRODUCTS */}
-        <div className="flex items-start gap-2 pl-[4vw]">
+        <div className="flex items-start gap-2 pl-[2vw] sm:pl-[4vw]">
           <div className="overflow-hidden">
-            <h2 className="hero-text text-[13vw] font-black leading-[0.8] tracking-tighter text-zinc-900 uppercase sm:text-[11vw] lg:text-[10vw]">
+            <h2 className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
               products
             </h2>
           </div>

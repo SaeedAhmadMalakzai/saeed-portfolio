@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef, useCallback, useState, useEffect } from "react";
 import { profile } from "@/lib/data";
-import { MobileMenu } from "./MobileMenu";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import gsap from "gsap";
 
 const navLinks = [
@@ -153,6 +152,68 @@ function BookCallButton() {
         </div>
       </div>
     </Link>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MOBILE MENU — inline responsive menu
+// ═══════════════════════════════════════════════════════════════
+function MobileMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
+
+  return (
+    <div className="md:hidden">
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative z-50 p-2 text-black"
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+      >
+        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      </button>
+
+      {/* Mobile Overlay */}
+      <div
+        ref={menuRef}
+        className={`fixed inset-0 z-40 flex flex-col items-center justify-center bg-white transition-all duration-500 ${
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <nav className="flex flex-col items-center gap-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className={`text-2xl font-medium transition-colors ${
+                pathname === link.href ? "text-black" : "text-zinc-500 hover:text-black"
+              }`}
+              style={{ fontFamily: "monospace", letterSpacing: "0.02em" }}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="mt-4 scale-125">
+            <BookCallButton />
+          </div>
+        </nav>
+      </div>
+    </div>
   );
 }
 

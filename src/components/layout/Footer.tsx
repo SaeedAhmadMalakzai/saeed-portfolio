@@ -48,7 +48,7 @@ function ScrambleLink({ href, text }: { href: string; text: string }) {
   return (
     <Link
       href={href}
-      className="group relative inline-flex items-center gap-2 px-4 py-2 text-sm font-medium"
+      className="group relative inline-flex items-center gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium"
       onMouseEnter={scramble}
       onMouseLeave={reset}
     >
@@ -90,7 +90,6 @@ function LinkedInIcon({ className, style }: { className?: string; style?: React.
     </svg>
   );
 }
-
 
 function GlobeIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
@@ -390,52 +389,52 @@ export function Footer() {
       {/* Left pixel strip */}
       <canvas
         ref={leftCanvasRef}
-        className="absolute left-0 top-0 h-full"
+        className="absolute left-0 top-0 h-full hidden sm:block"
         style={{ width: stripWidth, display: "block" }}
       />
 
       {/* Right pixel strip */}
       <canvas
         ref={rightCanvasRef}
-        className="absolute right-0 top-0 h-full"
+        className="absolute right-0 top-0 h-full hidden sm:block"
         style={{ width: stripWidth, display: "block" }}
       />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 py-20 min-h-75 flex flex-col justify-between">
-        <div className="mb-16">
-          <p className="text-sm font-mono leading-relaxed max-w-lg" style={{ color: COLOR, opacity: 0.8 }}>
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 lg:py-20 flex flex-col justify-between">
+        <div className="mb-10 sm:mb-16">
+          <p className="text-xs sm:text-sm font-mono leading-relaxed max-w-lg" style={{ color: COLOR, opacity: 0.8 }}>
             We embrace the freedom to explore innovative and unconventional ideas, 
             constantly pushing the boundaries of creativity to deliver extraordinary results.
           </p>
         </div>
 
-        <div className="flex items-center justify-between flex-1">
+        <div className="flex flex-col sm:flex-row items-center justify-between flex-1 gap-8 sm:gap-4">
           {/* Nav links - only About and Projects, stacked vertically */}
-          <nav className="flex flex-col space-y-2">
+          <nav className="flex flex-row sm:flex-col space-x-4 sm:space-x-0 sm:space-y-2 order-2 sm:order-1">
             <ScrambleLink href="/about" text="About" />
             <ScrambleLink href="/projects" text="Projects" />
           </nav>
 
           {/* SAY HELLO button */}
-          <div className="flex flex-1 items-center justify-center px-4">
+          <div className="flex flex-1 items-center justify-center px-2 sm:px-4 order-1 sm:order-2 w-full">
             <Link
               href="/contact"
-              className="group relative inline-flex items-center justify-center w-full max-w-lg px-20 py-10 text-4xl font-mono font-medium"
+              className="group relative inline-flex items-center justify-center w-full max-w-xs sm:max-w-lg px-8 sm:px-20 py-6 sm:py-10 text-2xl sm:text-4xl font-mono font-medium"
               style={{ backgroundColor: "#0a0e15", color: COLOR }}
               onMouseEnter={scrambleHello}
               onMouseLeave={resetHello}
             >
-              <span className="absolute -left-1 -top-1 transition-colors duration-300" style={{ color: COLOR }}>
-                <svg width="66" height="66" viewBox="0 0 16 16" fill="none"><path d="M1 6L1 1L6 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+              <span className="absolute -left-1 -top-1 sm:-left-1 sm:-top-1 transition-colors duration-300" style={{ color: COLOR }}>
+                <svg width="28" height="28" viewBox="0 0 16 16" fill="none" className="sm:w-[66px] sm:h-[66px]"><path d="M1 6L1 1L6 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
               </span>
-              <span className="absolute -right-1 -top-1 transition-colors duration-300" style={{ color: COLOR }}>
-                <svg width="66" height="66" viewBox="0 0 16 16" fill="none"><path d="M15 6L15 1L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+              <span className="absolute -right-1 -top-1 sm:-right-1 sm:-top-1 transition-colors duration-300" style={{ color: COLOR }}>
+                <svg width="28" height="28" viewBox="0 0 16 16" fill="none" className="sm:w-[66px] sm:h-[66px]"><path d="M15 6L15 1L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
               </span>
-              <span className="absolute -right-1 -bottom-1 transition-colors duration-300" style={{ color: COLOR }}>
-                <svg width="66" height="66" viewBox="0 0 16 16" fill="none"><path d="M15 10L15 15L10 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+              <span className="absolute -right-1 -bottom-1 sm:-right-1 sm:-bottom-1 transition-colors duration-300" style={{ color: COLOR }}>
+                <svg width="28" height="28" viewBox="0 0 16 16" fill="none" className="sm:w-[66px] sm:h-[66px]"><path d="M15 10L15 15L10 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
               </span>
-              <span className="absolute -left-1 -bottom-1 transition-colors duration-300" style={{ color: COLOR }}>
-                <svg width="66" height="66" viewBox="0 0 16 16" fill="none"><path d="M1 10L1 15L6 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+              <span className="absolute -left-1 -bottom-1 sm:-left-1 sm:-bottom-1 transition-colors duration-300" style={{ color: COLOR }}>
+                <svg width="28" height="28" viewBox="0 0 16 16" fill="none" className="sm:w-[66px] sm:h-[66px]"><path d="M1 10L1 15L6 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
               </span>
 
               <span className="relative h-[1.2em] overflow-hidden">
@@ -447,36 +446,36 @@ export function Footer() {
                 </span>
               </span>
 
-              <span className="relative h-10 w-10 overflow-hidden ml-4">
+              <span className="relative h-6 w-6 sm:h-10 sm:w-10 overflow-hidden ml-3 sm:ml-4">
                 <span className="block transition-transform duration-300 ease-out group-hover:translate-x-full">
-                  <ArrowRight className="h-10 w-10" />
+                  <ArrowRight className="h-6 w-6 sm:h-10 sm:w-10" />
                 </span>
                 <span className="absolute top-0 -left-full block transition-transform duration-300 ease-out group-hover:translate-x-full" style={{ color: COLOR }}>
-                  <ArrowRight className="h-10 w-10" />
+                  <ArrowRight className="h-6 w-6 sm:h-10 sm:w-10" />
                 </span>
               </span>
             </Link>
           </div>
 
           {/* Right side - Email, Phone, Social Icons */}
-          <div className="flex flex-col items-end space-y-4">
-            <div className="flex gap-3 justify-end items-baseline">
-              <span className="text-xs font-mono uppercase tracking-wider" style={{ color: COLOR, opacity: 0.5 }}>Email</span>
+          <div className="flex flex-col items-center sm:items-end space-y-3 sm:space-y-4 order-3">
+            <div className="flex flex-col sm:flex-row gap-1 sm:gap-3 justify-end items-center sm:items-baseline">
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-wider" style={{ color: COLOR, opacity: 0.5 }}>Email</span>
               <a 
                 href={`mailto:${profile.email || "hello@example.com"}`}
-                className="text-sm font-mono transition-colors hover:opacity-100"
+                className="text-xs sm:text-sm font-mono transition-colors hover:opacity-100"
                 style={{ color: COLOR, opacity: 0.8 }}
               >
                 {profile.email || "hello@example.com"}
               </a>
             </div>
-            <div className="flex gap-3 justify-end items-baseline">
-              <span className="text-xs font-mono uppercase tracking-wider" style={{ color: COLOR, opacity: 0.5 }}>Tel</span>
-              <span className="text-sm font-mono" style={{ color: COLOR, opacity: 0.8 }}>{PHONE}</span>
+            <div className="flex flex-col sm:flex-row gap-1 sm:gap-3 justify-end items-center sm:items-baseline">
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-wider" style={{ color: COLOR, opacity: 0.5 }}>Tel</span>
+              <span className="text-xs sm:text-sm font-mono" style={{ color: COLOR, opacity: 0.8 }}>{PHONE}</span>
             </div>
 
             {/* Social icons row */}
-            <div className="flex gap-3 justify-end pt-4">
+            <div className="flex gap-3 justify-end pt-2 sm:pt-4">
               {socialLinks.map((link) => {
                 const IconComponent = getSocialIcon(link.name);
                 return (
@@ -501,7 +500,7 @@ export function Footer() {
                     <span className="absolute -left-0.5 -bottom-0.5 opacity-0 scale-50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100" style={{ color: COLOR }}>
                       <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M1 10L1 15L6 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
                     </span>
-                    <IconComponent className="h-5 w-5" style={{ color: COLOR }} />
+                    <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: COLOR }} />
                   </Link>
                 );
               })}
@@ -512,12 +511,12 @@ export function Footer() {
 
       {/* Bottom section with halftone text */}
       <div className="relative z-10" style={{ backgroundColor: "#0a0e15", borderColor: "rgba(232,232,227,0.15)" }}>
-        <div className="relative mx-auto max-w-6xl" style={{ height: "clamp(180px, 21vw, 380px)" }}>
+        <div className="relative mx-auto max-w-6xl" style={{ height: "clamp(120px, 21vw, 380px)" }}>
           <HalftoneTextCanvas />
         </div>
 
-        <div className="mx-auto max-w-6xl px-6 py-6 flex justify-center">
-          <div className="text-xs font-mono" style={{ color: COLOR, opacity: 0.4 }}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 sm:py-6 flex justify-center">
+          <div className="text-[10px] sm:text-xs font-mono" style={{ color: COLOR, opacity: 0.4 }}>
             &copy; {new Date().getFullYear()} Saeed. All rights reserved.
           </div>
         </div>

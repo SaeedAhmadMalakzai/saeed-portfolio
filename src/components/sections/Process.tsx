@@ -60,7 +60,7 @@ function DisplayCard({
   return (
     <div
       className={cn(
-        "relative flex h-36 w-[22rem] -skew-y-[8deg] select-none flex-col justify-between border border-white/10 bg-black/80 backdrop-blur-md px-4 py-3 transition-all duration-700 after:absolute after:-right-1 after:top-[-5%] after:h-[110%] after:w-[20rem] after:bg-gradient-to-l after:from-background after:to-transparent after:content-[''] hover:border-white/30 hover:bg-black/90 [&>*]:flex [&>*]:items-center [&>*]:gap-2",
+        "relative flex h-28 sm:h-36 w-[16rem] sm:w-[18rem] md:w-[22rem] -skew-y-[8deg] select-none flex-col justify-between border border-white/10 bg-black/80 backdrop-blur-md px-4 py-3 transition-all duration-700 after:absolute after:-right-1 after:top-[-5%] after:h-[110%] after:w-[20rem] after:bg-gradient-to-l after:from-background after:to-transparent after:content-[''] hover:border-white/30 hover:bg-black/90 [&>*]:flex [&>*]:items-center [&>*]:gap-2",
         className
       )}
     >
@@ -68,17 +68,16 @@ function DisplayCard({
         <span className="relative inline-block bg-gray-800 p-1">
           {icon}
         </span>
-        <p className={cn("text-lg font-medium", titleClassName)}>{title}</p>
+        <p className={cn("text-base sm:text-lg font-medium", titleClassName)}>{title}</p>
       </div>
-      <p className="whitespace-nowrap text-lg text-gray-300">{description}</p>
-      <p className="text-gray-500">{date}</p>
+      <p className="whitespace-nowrap text-sm sm:text-lg text-gray-300">{description}</p>
+      <p className="text-gray-500 text-xs sm:text-base">{date}</p>
     </div>
   );
 }
 
 // Process-specific card data — gray & black only
 const processCards = [
-  // Card 1 - Process 1 (Discovery & Strategy) - DONE
   {
     icon: <CheckCircle2 className="size-4 text-gray-400" />,
     title: "Discovery Complete",
@@ -88,7 +87,6 @@ const processCards = [
     titleClassName: "text-white",
     className: "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:outline-white/10 before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-black/60 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
   },
-  // Card 2 - Process 2 (Design & Prototype) - DONE
   {
     icon: <CheckCircle2 className="size-4 text-gray-400" />,
     title: "Design Approved",
@@ -96,9 +94,8 @@ const processCards = [
     date: "Completed",
     iconClassName: "text-gray-400",
     titleClassName: "text-white",
-    className: "[grid-area:stack] translate-x-16 translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:outline-white/10 before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-black/60 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
+    className: "[grid-area:stack] translate-x-12 sm:translate-x-16 translate-y-8 sm:translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:outline-white/10 before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-black/60 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
   },
-  // Card 3 - Process 3 (Develop & Integrate) - IN PROGRESS
   {
     icon: <Loader2 className="size-4 text-gray-300 animate-spin" />,
     title: "Development",
@@ -106,7 +103,7 @@ const processCards = [
     date: "In Progress",
     iconClassName: "text-gray-300",
     titleClassName: "text-white",
-    className: "[grid-area:stack] translate-x-32 translate-y-20 hover:translate-y-10",
+    className: "[grid-area:stack] translate-x-24 sm:translate-x-32 translate-y-16 sm:translate-y-20 hover:translate-y-10",
   },
 ];
 
@@ -389,17 +386,17 @@ export function Process() {
       style={{ height: "100vh", minHeight: "700px" }}
     >
       <div ref={containerRef} className="w-full h-full">
-        {/* Left side - Step indicators */}
-        <div className="absolute left-4 sm:left-8 lg:left-12 top-1/2 z-30 -translate-y-1/2">
-          <div className="flex flex-col items-center">
+        {/* Top bar - Step indicators (mobile row) / Left side (desktop) */}
+        <div className="absolute top-4 left-0 right-0 z-30 flex items-center justify-center md:left-4 md:right-auto md:top-1/2 md:-translate-y-1/2 md:w-auto">
+          <div className="flex flex-row items-center md:flex-col">
             {processes.map((process, i) => (
               <button
                 key={process.id}
                 onClick={() => goToStep(i)}
-                className="step-indicator group pt-14 relative flex items-center gap-3 py-3"
+                className="step-indicator group relative flex items-center py-2 px-2 sm:px-3 md:py-3 md:px-0 md:pt-14"
               >
                 <div
-                  className={`flex h-10 w-10 items-center justify-center transition-all duration-500 ${
+                  className={`flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center transition-all duration-500 ${
                     i === currentIndex
                       ? "bg-black"
                       : "bg-black border border-black/10 hover:border-black/30"
@@ -410,19 +407,32 @@ export function Process() {
                     alt={process.title}
                     width={20}
                     height={20}
-                    className="w-5 h-5 transition-all duration-500"
+                    className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-500"
                     style={{ filter: "brightness(0) invert(1)" }}
                   />
                 </div>
 
                 <div
-                  className={`h-px w-5 transition-all duration-500 ${
+                  className={`hidden md:block h-px w-5 transition-all duration-500 ${
                     i === currentIndex ? "bg-black" : "bg-transparent"
                   }`}
                 />
 
+                {/* Mobile horizontal line */}
                 {i < processes.length - 1 && (
-                  <div className="absolute left-5 top-full h-6 w-px bg-black/10">
+                  <div className="md:hidden absolute top-1/2 left-full h-px w-6 sm:w-8 bg-black/10 -translate-y-1/2">
+                    <div
+                      className="absolute top-0 left-0 h-full bg-black transition-all duration-700 ease-out"
+                      style={{
+                        width: i < currentIndex ? "100%" : "0%",
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* Desktop vertical line */}
+                {i < processes.length - 1 && (
+                  <div className="hidden md:block absolute left-1/2 md:left-5 top-full h-6 w-px bg-black/10 -translate-x-1/2 md:translate-x-0">
                     <div
                       className="absolute top-0 left-0 w-full bg-black transition-all duration-700 ease-out"
                       style={{
@@ -437,12 +447,12 @@ export function Process() {
         </div>
 
         {/* Main content */}
-        <div className="relative w-full h-full flex items-center justify-center px-4 sm:px-8 lg:px-32 xl:px-40">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 w-full max-w-6xl items-center">
+        <div className="relative w-full h-full flex items-center justify-center px-4 sm:px-8 lg:px-32 xl:px-40 pt-20 md:pt-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 w-full max-w-6xl items-center">
 
             {/* Left: Content */}
-            <div className="relative" style={{ minHeight: "360px" }}>
-              <div ref={iconRef} className="relative mb-10 h-14">
+            <div className="relative min-h-[260px] md:min-h-[360px]">
+              <div ref={iconRef} className="relative mb-6 md:mb-10 h-12 md:h-14">
                 {processes.map((process, i) => (
                   <div
                     key={process.id}
@@ -456,13 +466,13 @@ export function Process() {
                       visibility: i === currentIndex ? "visible" : "hidden",
                     }}
                   >
-                    <div className="flex h-14 w-14 items-center justify-center bg-black">
+                    <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center bg-black">
                       <Image
                         src={process.icon}
                         alt={process.title}
                         width={24}
                         height={24}
-                        className="w-6 h-6"
+                        className="w-5 h-5 md:w-6 md:h-6"
                         style={{ filter: "brightness(0) invert(1)" }}
                       />
                     </div>
@@ -470,7 +480,7 @@ export function Process() {
                 ))}
               </div>
 
-              <div ref={titleRef} className="relative mb-8">
+              <div ref={titleRef} className="relative mb-6 md:mb-8">
                 {processes.map((process, i) => (
                   <div
                     key={process.id}
@@ -487,7 +497,7 @@ export function Process() {
                     <h2
                       className="font-bold tracking-tight"
                       style={{
-                        fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                        fontSize: "clamp(1.8rem, 5vw, 4rem)",
                         fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
                         fontWeight: 700,
                         letterSpacing: "-0.03em",
@@ -516,7 +526,7 @@ export function Process() {
                     }}
                   >
                     <p
-                      className="text-base leading-relaxed"
+                      className="text-sm sm:text-base leading-relaxed"
                       style={{
                         color: "#666666",
                         fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
@@ -531,7 +541,7 @@ export function Process() {
             </div>
 
             {/* Right: Image (Process 1 & 2) or DisplayCards (Process 3) */}
-            <div ref={imageRef} className="relative hidden lg:block">
+            <div ref={imageRef} className="relative">
               {processes.map((process, i) => (
                 <div
                   key={process.id}
@@ -546,7 +556,7 @@ export function Process() {
                   }}
                 >
                   {process.image ? (
-                    <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden">
+                    <div className="relative aspect-[4/3] w-full max-w-lg mx-auto lg:mx-0 overflow-hidden">
                       <Image
                         src={process.image}
                         alt={process.title}
@@ -567,13 +577,13 @@ export function Process() {
         </div>
 
         {/* Scroll hint - bottom center */}
-        <div className="absolute bottom-8 left-0 right-0 z-30 flex flex-col items-center gap-2">
+        <div className="absolute bottom-6 sm:bottom-8 left-0 right-0 z-30 flex flex-col items-center gap-2">
           <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">
             {currentIndex < processes.length - 1 ? "Scroll to explore" : "End of process"}
           </span>
           {currentIndex < processes.length - 1 && (
             <div className="flex flex-col items-center gap-1 animate-bounce">
-              <div className="w-px h-6 bg-black/20" />
+              <div className="w-px h-4 sm:h-6 bg-black/20" />
             </div>
           )}
         </div>

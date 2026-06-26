@@ -134,8 +134,8 @@ export function ProjectsPreview() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative w-full overflow-hidden select-none"
-      style={{ height: "100vh", minHeight: "600px" }}
+      className="relative w-full overflow-hidden select-none md:h-screen"
+      style={{ minHeight: "600px" }}
     >
       {/* Left side - WORK label */}
       <div className="absolute top-1/2 left-4 md:left-8 z-30 -translate-y-1/2 hidden sm:block">
@@ -145,19 +145,27 @@ export function ProjectsPreview() {
       </div>
 
       {/* Main content - centered layout */}
-      <div className="relative w-full h-full flex items-center justify-center px-4 sm:px-8 lg:px-16 xl:px-24">
-        
+      <div className="relative w-full h-full flex flex-col md:flex-row items-center justify-center px-4 sm:px-8 lg:px-16 xl:px-24 py-8 md:py-0 gap-6 md:gap-0">
+
+        {/* Mobile Title */}
+        <div className="md:hidden w-full text-center">
+          <h2 
+            className="text-2xl font-bold text-black whitespace-pre-line leading-tight"
+            style={{
+              fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
+              fontWeight: 700,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {currentProject.title}
+          </h2>
+        </div>
+
         {/* Center content wrapper */}
         <div 
-          className="relative"
-          style={{ 
-            width: "min(65vw, 700px)", 
-            height: "min(45vw, 420px)", 
-            maxWidth: "700px", 
-            maxHeight: "480px",
-          }}
+          className="relative w-[85vw] h-[55vw] md:w-[min(65vw,700px)] md:h-[min(45vw,420px)] max-h-[260px] md:max-h-[480px] md:max-w-[700px]"
         >
-          
+
           {/* Image container */}
           <div
             ref={imageRef}
@@ -226,7 +234,7 @@ export function ProjectsPreview() {
               stacking context. translateY lives one level down on titleRef.
               ═══════════════════════════════════════════════════════════════ */}
           <div
-            className="absolute top-1/2 pointer-events-none"
+            className="hidden md:block absolute top-1/2"
             style={{
               right: "60%",
               width: "500px",
@@ -271,7 +279,7 @@ export function ProjectsPreview() {
         </div>
 
         {/* Right side - Services + Line + Thumbnails */}
-        <div className="absolute right-4 sm:right-8 lg:right-12 xl:right-16 top-1/2 z-20 -translate-y-1/2 flex items-center gap-3 lg:gap-4">
+        <div className="relative md:absolute right-auto md:right-4 lg:right-12 xl:right-16 top-auto md:top-1/2 z-20 md:-translate-y-1/2 flex items-center gap-3 lg:gap-4">
           {/* Services text - slide up animation */}
           <div ref={servicesRef} className="relative hidden sm:block" style={{ width: "150px", height: "120px" }}>
             {projects.map((project, i) => (
@@ -298,7 +306,7 @@ export function ProjectsPreview() {
           </div>
 
           {/* Thumbnails */}
-          <div className="flex flex-col gap-1.5 pl-5">
+          <div className="flex flex-row md:flex-col gap-1.5 pl-0 md:pl-5">
             {projects.map((project, i) => (
               <button
                 key={project.id}
@@ -308,7 +316,7 @@ export function ProjectsPreview() {
                 <div className={`relative w-10 lg:w-10 h-6 lg:h-6 overflow-hidden transition-opacity duration-300 ${i === currentIndex ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}>
                   <Image src={project.thumb} alt={project.title} fill className="object-cover" sizes="48px" />
                 </div>
-                <div className={`absolute -left-5 top-1/2 -translate-y-1/2 h-px w-4 transition-colors duration-300 ${i === currentIndex ? 'bg-black' : 'bg-transparent'}`} />
+                <div className={`absolute -left-5 top-1/2 -translate-y-1/2 h-px w-4 transition-colors duration-300 hidden md:block ${i === currentIndex ? 'bg-black' : 'bg-transparent'}`} />
               </button>
             ))}
           </div>
@@ -316,7 +324,7 @@ export function ProjectsPreview() {
       </div>
 
       {/* Bottom - Navigation */}
-      <div className="absolute bottom-6 sm:bottom-10 left-0 right-0 z-30 flex flex-col items-center gap-4 sm:gap-5">
+      <div className="relative md:absolute bottom-0 md:bottom-6 lg:bottom-10 left-0 right-0 z-30 flex flex-col items-center gap-4 sm:gap-5 mt-6 md:mt-0">
         <div className="flex items-center gap-5 sm:gap-6">
           <button
             onClick={() => goToProject(currentIndex - 1)}
