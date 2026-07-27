@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saeed-portfolio.vercel.app"),
+  metadataBase: new URL("https://saeed-portfolio-amber.vercel.app"),
   title: {
     default: `${profile.name} | ${profile.title}`,
     template: `%s | ${profile.name}`,
