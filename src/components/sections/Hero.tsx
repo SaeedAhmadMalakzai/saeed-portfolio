@@ -6,7 +6,7 @@ import { profile } from "@/lib/data";
 import gsap from "gsap";
 
 const images = [
-  "/images/projects/kankor.jpg",
+  "/images/projects/kankorpass.jpg",
   "/images/projects/kaar.png",
   "/images/projects/rahnaward.jpg",
   "/images/projects/jirga.png",

@@ -9,8 +9,9 @@ import { getFeaturedProjects } from "@/lib/data";
 const projects = getFeaturedProjects(6).map((project, index) => ({
   id: index + 1,
   title: project.shortTitle ?? project.title,
-  image: project.image ?? "/images/projects/kankor.jpg",
-  thumb: project.image ?? "/images/projects/kankor.jpg",
+  image: project.fullImage ?? project.image ?? "/images/projects/kankorpass.jpg",
+  thumb: project.image ?? "/images/projects/kankorpass.jpg",
+  hasFullPage: Boolean(project.fullImage),
   tags: project.tags.slice(0, 4),
   href: `/projects/${project.slug}`,
 }));
@@ -121,8 +122,8 @@ export function ProjectsPreview() {
         </div>
 
         {/* Center content wrapper */}
-        <div 
-          className="relative w-[85vw] h-[55vw] md:w-[min(65vw,700px)] md:h-[min(45vw,420px)] max-h-[260px] md:max-h-[480px] md:max-w-[700px]"
+        <div
+          className="relative w-[88vw] h-[58vw] md:w-[min(74vw,900px)] md:h-[min(50vw,560px)] max-h-[300px] md:max-h-[560px] md:max-w-[900px]"
         >
 
           {/* Image container */}
@@ -180,8 +181,19 @@ export function ProjectsPreview() {
                 className={`project-image absolute inset-0 ${i === currentIndex ? 'active' : ''}`}
                 style={{ opacity: i === currentIndex ? 1 : 0 }}
               >
-                <Link href={project.href} className="relative block w-full h-full">
-                  <Image src={project.image} alt={project.title} fill className="object-cover" priority={i === 0} sizes="700px" />
+                <Link href={project.href} className="relative block w-full h-full overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    priority={i === 0}
+                    sizes="900px"
+                    className={
+                      project.hasFullPage
+                        ? "object-cover [object-position:center_top] hover:[object-position:center_bottom] [transition:object-position_6s_ease-in-out]"
+                        : "object-cover"
+                    }
+                  />
                 </Link>
               </div>
             ))}

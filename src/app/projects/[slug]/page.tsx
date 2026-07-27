@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { getProjectBySlug, projects } from "@/lib/data";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { ScreenshotViewer } from "@/components/ui/ScreenshotViewer";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -57,15 +58,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <Badge key={tag}>{tag}</Badge>
         ))}
       </div>
-      {project.image && (
-        <Image
-          src={project.image}
+      {project.fullImage ? (
+        <ScreenshotViewer
+          src={project.fullImage}
           alt={project.title}
-          width={800}
-          height={450}
-          className="mt-8 rounded-xl object-cover"
+          heightClass="h-[65vh] sm:h-[75vh]"
         />
-      )}
+      ) : project.image ? (
+        project.platform === "iOS" ? (
+          <ScreenshotViewer
+            src={project.image}
+            alt={project.title}
+            heightClass="h-[65vh] sm:h-[75vh]"
+          />
+        ) : (
+          <Image
+            src={project.image}
+            alt={project.title}
+            width={1440}
+            height={900}
+            className="mt-8 w-full rounded-xl border border-zinc-200 object-cover"
+          />
+        )
+      ) : null}
       <p className="mt-8 text-lg text-zinc-700">{project.description}</p>
       {project.highlights && project.highlights.length > 0 && (
         <ul className="mt-6 space-y-3">

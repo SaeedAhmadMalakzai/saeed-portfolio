@@ -16,6 +16,8 @@ export interface Project {
   content?: string;
   highlights?: string[];
   image?: string;
+  /** Tall full-page capture used by the scrollable screenshot viewer */
+  fullImage?: string;
   tags: string[];
   liveUrl?: string;
   repoUrl?: string;

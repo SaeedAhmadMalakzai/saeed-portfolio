@@ -48,9 +48,9 @@ export const skills: Skill[] = [
 
 export const projects: Project[] = [
   {
-    slug: "kankor",
-    title: "Kankor.af — University Entrance-Exam Preparation Platform",
-    shortTitle: "Kankor.af\nExam Prep",
+    slug: "kankorpass",
+    title: "KankorPass.af — Kankor Preparation System (KPS)",
+    shortTitle: "KankorPass\nExam Prep",
     description:
       "Trilingual (EN/PS/DA) exam-prep platform with practice, mock, and webcam-proctored exams, an animated 3D study coach, and goal tracking against real university cutoff data.",
     highlights: [
@@ -58,9 +58,10 @@ export const projects: Project[] = [
       "Created an animated 3D study coach with voice guidance and guided product tours, lazy-loaded and tiered for low-end devices",
       "Implemented subscription gating, gamified dashboard, study planner, leaderboard, and goal tracking against real university cutoff data",
     ],
-    image: "/images/projects/kankor.jpg",
+    image: "/images/projects/kankorpass.jpg",
+    fullImage: "/images/projects/kankorpass-full.jpg",
     tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "TensorFlow.js", "Three.js", "PostgreSQL"],
-    liveUrl: "https://kankor.af",
+    liveUrl: "https://kankor-henna.vercel.app",
     featured: true,
     platform: "Web",
   },
@@ -92,6 +93,7 @@ export const projects: Project[] = [
       "Approximately 40 routes across a modular monolith with Drizzle ORM, PostgreSQL, and Redis",
     ],
     image: "/images/projects/kaar.png",
+    fullImage: "/images/projects/kaar-full.jpg",
     tags: ["Next.js 16", "React 19", "TypeScript", "Drizzle ORM", "PostgreSQL", "Redis", "Docker"],
     featured: true,
     platform: "Web",
@@ -140,6 +142,7 @@ export const projects: Project[] = [
       "Designed a trilingual UI with native RTL support",
     ],
     image: "/images/projects/rahnaward.jpg",
+    fullImage: "/images/projects/rahnaward-full.jpg",
     tags: ["React", "Vite", "Tailwind CSS", "Material UI", "Node.js", "Express", "REST APIs"],
     featured: true,
     platform: "Web",

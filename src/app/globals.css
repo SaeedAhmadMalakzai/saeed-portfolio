@@ -42,3 +42,33 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Thin template-styled scrollbar for the full-page screenshot viewer */
+.screenshot-frame {
+  scrollbar-width: thin;
+  scrollbar-color: #0a0e15 #e8e8e3;
+}
+
+.screenshot-frame::-webkit-scrollbar {
+  width: 6px;
+}
+
+.screenshot-frame::-webkit-scrollbar-track {
+  background: #e8e8e3;
+}
+
+.screenshot-frame::-webkit-scrollbar-thumb {
+  background: #0a0e15;
+}
+
+/* Slow vertical pan used by project cards & the featured carousel:
+   translateY(-100%) is relative to the tall image itself, the trailing
+   offset pulls it back so the bottom edge stays in view. */
+.pan-on-hover {
+  transition: transform 5s ease-in-out;
+}
+
+.group:hover .pan-on-hover,
+.pan-hover-target:hover .pan-on-hover {
+  transform: translateY(calc(-100% + var(--pan-window, 100%)));
+}
