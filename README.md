@@ -34,3 +34,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Contact form delivery
+
+The contact API (`src/app/api/contact/route.ts`) forwards submissions through
+[Web3Forms](https://web3forms.com) when `WEB3FORMS_ACCESS_KEY` is set.
+Get a free key by entering the portfolio email on web3forms.com (the key is
+emailed instantly), then set it in `.env.local` for local dev and as an
+environment variable in the hosting dashboard for production. Without the key,
+the form still shows visitors a success state but nothing is delivered.

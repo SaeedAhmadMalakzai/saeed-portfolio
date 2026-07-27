@@ -6,10 +6,10 @@ import { profile } from "@/lib/data";
 import gsap from "gsap";
 
 const images = [
-  "/images/bgdk.jpeg",
-  "/images/s1.jpg",
-  "/images/s2.jpg",
-  "/images/s3.jpg",
+  "/images/projects/kankor.jpg",
+  "/images/projects/kaar.png",
+  "/images/projects/rahnaward.jpg",
+  "/images/projects/jirga.png",
 ];
 
 export function Hero() {
@@ -168,7 +168,7 @@ export function Hero() {
                 >
                   <Image
                     src={src}
-                    alt={profile.name}
+                    alt={`Screenshot of a project by ${profile.name}`}
                     fill
                     className="object-cover"
                     priority={i === 0}
