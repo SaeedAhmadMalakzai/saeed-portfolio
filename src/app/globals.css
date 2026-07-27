@@ -72,3 +72,40 @@ body {
 .pan-hover-target:hover .pan-on-hover {
   transform: translateY(calc(-100% + var(--pan-window, 100%)));
 }
+
+/* Touch devices can't hover — auto-play the pan instead */
+@keyframes pan-object-y {
+  from {
+    object-position: center top;
+  }
+  to {
+    object-position: center bottom;
+  }
+}
+
+@keyframes pan-translate-y {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% + var(--pan-window, 100%)));
+  }
+}
+
+@media (hover: none) {
+  .pan-object-auto {
+    animation: pan-object-y 14s ease-in-out infinite alternate;
+  }
+
+  .pan-on-hover {
+    animation: pan-translate-y 14s ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pan-object-auto,
+  .pan-on-hover {
+    animation: none !important;
+    transition: none !important;
+  }
+}

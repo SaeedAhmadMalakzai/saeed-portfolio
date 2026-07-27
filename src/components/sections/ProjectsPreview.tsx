@@ -190,7 +190,7 @@ export function ProjectsPreview() {
                     sizes="900px"
                     className={
                       project.hasFullPage
-                        ? "object-cover [object-position:center_top] hover:[object-position:center_bottom] [transition:object-position_6s_ease-in-out]"
+                        ? "pan-object-auto object-cover [object-position:center_top] hover:[object-position:center_bottom] [transition:object-position_6s_ease-in-out]"
                         : "object-cover"
                     }
                   />
