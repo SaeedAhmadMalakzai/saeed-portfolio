@@ -24,7 +24,7 @@ const processes = [
     title: "Design & Prototype",
     description:
       "I craft clean, intuitive interfaces with a focus on usability and aesthetics. From wireframes to high-fidelity prototypes, I ensure the experience feels right before a single line of code is written.",
-    image: "/images/process-2.jpg",
+    image: "/images/s2.jpg",
   },
   {
     id: 3,

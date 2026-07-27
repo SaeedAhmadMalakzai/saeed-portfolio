@@ -14,7 +14,6 @@ const services = [
     description:
       "I build end-to-end web applications using React, Vue.js, Node.js, Django, and Flask. From responsive frontends to scalable REST APIs.",
     tags: ["React", "Vue.js", "Node.js", "Django", "Flask", "FastAPI"],
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80&auto=format",
   },
   {
     id: "02",
@@ -23,7 +22,6 @@ const services = [
     description:
       "I develop cross-platform and native mobile apps for iOS and Android using Swift, SwiftUI, and React Native with real-time features.",
     tags: ["iOS", "Swift", "SwiftUI", "React Native", "Android", "CocoaPods"],
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80&auto=format",
   },
   {
     id: "03",
@@ -32,7 +30,6 @@ const services = [
     description:
       "I integrate Generative AI and LLMs into applications, build intelligent automation tools, and implement data analysis pipelines.",
     tags: ["GPT", "OpenAI API", "Scikit-learn", "Pandas", "Gen AI"],
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80&auto=format",
   },
   {
     id: "04",
@@ -41,7 +38,6 @@ const services = [
     description:
       "I design and manage relational databases with optimized schemas, data modeling, and administration using MySQL, PostgreSQL, and Prisma.",
     tags: ["MySQL", "PostgreSQL", "SQLite", "Prisma", "Data Modeling"],
-    image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=600&q=80&auto=format",
   },
 ];
 

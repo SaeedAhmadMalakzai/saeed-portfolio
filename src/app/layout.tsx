@@ -17,8 +17,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: `${profile.name} | Portfolio`,
-  description: profile.bio,
+  metadataBase: new URL("https://saeed-portfolio.vercel.app"),
+  title: {
+    default: `${profile.name} | ${profile.title}`,
+    template: `%s | ${profile.name}`,
+  },
+  description:
+    "Full-stack & mobile developer building production web, iOS, and desktop applications — Next.js, React, Node.js, Python, and Swift/SwiftUI.",
+  keywords: [
+    "Saeed Ahmad Malakzai",
+    "Full-Stack Developer",
+    "Mobile Developer",
+    "Next.js",
+    "React",
+    "SwiftUI",
+    "Afghanistan",
+  ],
+  openGraph: {
+    title: `${profile.name} | ${profile.title}`,
+    description:
+      "Full-stack & mobile developer building production web, iOS, and desktop applications.",
+    type: "website",
+    images: ["/images/profile.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -32,7 +53,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
       <body className="flex min-h-full flex-col">
-    
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />

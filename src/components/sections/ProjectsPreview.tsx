@@ -4,57 +4,16 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
+import { getFeaturedProjects } from "@/lib/data";
 
-const projects = [
-  {
-    id: 1,
-    title: "Powered to Play\nAll Day",
-    image: "/images/bgdk.jpeg",
-    thumb: "/images/bgdk.jpeg",
-    tags: ["Creative Direction", "Art Direction", "CGI Production", "Production"],
-    href: "/work/oneplus-powered-to-play-all-day",
-  },
-  {
-    id: 2,
-    title: "The Eternal Horse\nx Marina IFC",
-    image: "/images/s1.jpg",
-    thumb: "/images/s1.jpg",
-    tags: ["Visual Direction", "Visual Production", "On-site supervise"],
-    href: "/work/the-eternal-horse-x-marina-ifc",
-  },
-  {
-    id: 3,
-    title: "Year of the\nRabbit",
-    image: "/images/s2.jpg",
-    thumb: "/images/s2.jpg",
-    tags: ["Creative Direction", "Art Direction", "Concept CGI Art"],
-    href: "/work/year-of-the-rabbit-la-mer",
-  },
-  {
-    id: 4,
-    title: "Louis Vuitton\nSeries",
-    image: "/images/s3.jpg",
-    thumb: "/images/s3.jpg",
-    tags: ["Direction", "Production", "Photography"],
-    href: "/work/louis-vuitton-series",
-  },
-  {
-    id: 5,
-    title: "Oriens Lumina\nWalks",
-    image: "/images/bgdk.jpeg",
-    thumb: "/images/bgdk.jpeg",
-    tags: ["Experiential", "Motion Design", "On-set Production", "Lighting Direction"],
-    href: "/work/moment-factory",
-  },
-  {
-    id: 6,
-    title: "Perfection\nat Play",
-    image: "/images/s1.jpg",
-    thumb: "/images/s1.jpg",
-    tags: ["Art Direction", "Creative Direction", "CGI Art", "Management", "Production"],
-    href: "/work/oneplus-buds-pro-3",
-  },
-];
+const projects = getFeaturedProjects(6).map((project, index) => ({
+  id: index + 1,
+  title: project.shortTitle ?? project.title,
+  image: project.image ?? "/images/bgdk.jpeg",
+  thumb: project.image ?? "/images/bgdk.jpeg",
+  tags: project.tags.slice(0, 4),
+  href: `/projects/${project.slug}`,
+}));
 
 export function ProjectsPreview() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -357,8 +316,8 @@ export function ProjectsPreview() {
           </button>
         </div>
 
-        <Link 
-          href="/work" 
+        <Link
+          href="/projects"
           className="text-[10px] font-bold uppercase tracking-[0.25em] underline underline-offset-4 decoration-1 hover:no-underline transition-all"
           style={{ color: "#1a1a1a" }}
         >

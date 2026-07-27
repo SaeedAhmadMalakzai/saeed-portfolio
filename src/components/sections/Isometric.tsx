@@ -31,7 +31,7 @@ export function Isometric() {
   const floatY = useMotionValue(0);
 
   useEffect(() => {
-    let startTime = Date.now();
+    const startTime = Date.now();
     let animationId: number;
 
     const animate = () => {

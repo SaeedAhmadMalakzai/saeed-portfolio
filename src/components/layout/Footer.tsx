@@ -5,7 +5,7 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import { profile, socialLinks } from "@/lib/data";
 import { ArrowRight } from "lucide-react";
 
-const PHONE = "+39 375 930 64 63";
+const PHONE = "+93 7303 255 32";
 const COLOR = "#e8e8e3";
 
 const chars = "abcdefghijklmnopqrstuvwxyz@#$%^&*()_+-=[]{}|;:',.<>?/0123456789".split("");
@@ -236,12 +236,22 @@ function HalftoneTextCanvas() {
   );
 }
 
+interface PixelCell {
+  col: number;
+  row: number;
+  x: number;
+  y: number;
+  opacity: number;
+  baseOpacity: number;
+  hoverIntensity: number;
+}
+
 export function Footer() {
   const leftCanvasRef = useRef<HTMLCanvasElement>(null);
   const rightCanvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
-  const leftGridRef = useRef<{ col: number; row: number; x: number; y: number; opacity: number; baseOpacity: number; hoverIntensity: number }[]>([]);
-  const rightGridRef = useRef<{ col: number; row: number; x: number; y: number; opacity: number; baseOpacity: number; hoverIntensity: number }[]>([]);
+  const leftGridRef = useRef<PixelCell[]>([]);
+  const rightGridRef = useRef<PixelCell[]>([]);
   const animationRef = useRef<number>(0);
 
   const cellSize = 12;
@@ -276,7 +286,7 @@ export function Footer() {
     return grid;
   }, []);
 
-  const draw = useCallback((canvas: HTMLCanvasElement, gridRef: React.MutableRefObject<any[]>, isRight: boolean) => {
+  const draw = useCallback((canvas: HTMLCanvasElement, gridRef: React.MutableRefObject<PixelCell[]>, isRight: boolean) => {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -327,14 +337,6 @@ export function Footer() {
     });
   }, []);
 
-  const drawLoop = useCallback(() => {
-    const leftCanvas = leftCanvasRef.current;
-    const rightCanvas = rightCanvasRef.current;
-    if (leftCanvas) draw(leftCanvas, leftGridRef, false);
-    if (rightCanvas) draw(rightCanvas, rightGridRef, true);
-    animationRef.current = requestAnimationFrame(drawLoop);
-  }, [draw]);
-
   useEffect(() => {
     const leftCanvas = leftCanvasRef.current;
     const rightCanvas = rightCanvasRef.current;
@@ -372,6 +374,11 @@ export function Footer() {
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseleave", handleMouseLeave);
 
+    const drawLoop = () => {
+      if (leftCanvasRef.current) draw(leftCanvasRef.current, leftGridRef, false);
+      if (rightCanvasRef.current) draw(rightCanvasRef.current, rightGridRef, true);
+      animationRef.current = requestAnimationFrame(drawLoop);
+    };
     animationRef.current = requestAnimationFrame(drawLoop);
 
     return () => {
@@ -380,7 +387,7 @@ export function Footer() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationRef.current);
     };
-  }, [initGrid, drawLoop]);
+  }, [initGrid, draw]);
 
   const { displayText: sayHelloText, scramble: scrambleHello, reset: resetHello } = useScrambleText("SAY HELLO");
 
@@ -403,22 +410,22 @@ export function Footer() {
       <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 lg:py-20 flex flex-col justify-between">
         <div className="mb-10 sm:mb-16">
           <p className="text-xs sm:text-sm font-mono leading-relaxed max-w-lg" style={{ color: COLOR, opacity: 0.8 }}>
-            We embrace the freedom to explore innovative and unconventional ideas, 
-            constantly pushing the boundaries of creativity to deliver extraordinary results.
+            I design, build, and ship production web, mobile, and desktop applications —
+            from clean interfaces to real-time systems, payments, and deployment.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between flex-1 gap-8 sm:gap-4">
           {/* Nav links - only About and Projects, stacked vertically */}
           <nav className="flex flex-row sm:flex-col space-x-4 sm:space-x-0 sm:space-y-2 order-2 sm:order-1">
-            <ScrambleLink href="/about" text="About" />
+            <ScrambleLink href="/#about" text="About" />
             <ScrambleLink href="/projects" text="Projects" />
           </nav>
 
           {/* SAY HELLO button */}
           <div className="flex flex-1 items-center justify-center px-2 sm:px-4 order-1 sm:order-2 w-full">
             <Link
-              href="/contact"
+              href="/#contact"
               className="group relative inline-flex items-center justify-center w-full max-w-xs sm:max-w-lg px-8 sm:px-20 py-6 sm:py-10 text-2xl sm:text-4xl font-mono font-medium"
               style={{ backgroundColor: "#0a0e15", color: COLOR }}
               onMouseEnter={scrambleHello}
@@ -461,12 +468,12 @@ export function Footer() {
           <div className="flex flex-col items-center sm:items-end space-y-3 sm:space-y-4 order-3">
             <div className="flex flex-col sm:flex-row gap-1 sm:gap-3 justify-end items-center sm:items-baseline">
               <span className="text-[10px] sm:text-xs font-mono uppercase tracking-wider" style={{ color: COLOR, opacity: 0.5 }}>Email</span>
-              <a 
-                href={`mailto:${profile.email || "hello@example.com"}`}
+              <a
+                href={`mailto:${profile.email}`}
                 className="text-xs sm:text-sm font-mono transition-colors hover:opacity-100"
                 style={{ color: COLOR, opacity: 0.8 }}
               >
-                {profile.email || "hello@example.com"}
+                {profile.email}
               </a>
             </div>
             <div className="flex flex-col sm:flex-row gap-1 sm:gap-3 justify-end items-center sm:items-baseline">
@@ -517,7 +524,7 @@ export function Footer() {
 
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 sm:py-6 flex justify-center">
           <div className="text-[10px] sm:text-xs font-mono" style={{ color: COLOR, opacity: 0.4 }}>
-            &copy; {new Date().getFullYear()} Saeed. All rights reserved.
+            &copy; {new Date().getFullYear()} {profile.name}. All rights reserved.
           </div>
         </div>
       </div>

@@ -5,12 +5,11 @@ import { usePathname } from "next/navigation";
 import { useRef, useCallback, useState, useEffect } from "react";
 import { profile } from "@/lib/data";
 import { ArrowRight, Menu, X } from "lucide-react";
-import gsap from "gsap";
 
 const navLinks = [
-  { href: "/about", label: "About" },
+  { href: "/#about", label: "About" },
   { href: "/projects", label: "Projects" },
-  { href: "/process", label: "Process" },
+  { href: "/#process", label: "Process" },
 ];
 
 const chars = "abcdefghijklmnopqrstuvwxyz@#$%^&*()_+-=[]{}|;:',.<>?/0123456789".split("");
@@ -91,7 +90,7 @@ function Logo() {
           color: "#000",
         }}
       >
-        {profile.name}
+        {profile.shortName}
       </h2>
     </Link>
   );
@@ -105,7 +104,7 @@ function BookCallButton() {
 
   return (
     <Link
-      href="/contact"
+      href="/#contact"
       className="group relative inline-flex items-center gap-2 px-3 py-2 text-sm font-medium"
       onMouseEnter={scramble}
       onMouseLeave={reset}
@@ -163,9 +162,13 @@ function MobileMenu() {
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  // Close the menu when the route changes (state adjustment during render,
+  // avoids a cascading-render setState inside an effect).
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsOpen(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     if (isOpen) {

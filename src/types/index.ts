@@ -11,13 +11,16 @@ export interface Skill {
 export interface Project {
   slug: string;
   title: string;
+  shortTitle?: string;
   description: string;
   content?: string;
+  highlights?: string[];
   image?: string;
   tags: string[];
   liveUrl?: string;
   repoUrl?: string;
   featured?: boolean;
+  platform?: string;
 }
 
 export interface Education {
@@ -36,17 +39,22 @@ export interface Certification {
 
 export interface Profile {
   name: string;
+  shortName: string;
   title: string;
   bio: string;
   email: string;
+  phone?: string;
   location: string;
+  githubUsername: string;
   avatar?: string;
 }
 
 export interface ContactFormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  subject: string;
+  company?: string;
+  budget?: string;
   message: string;
 }
 

@@ -32,7 +32,6 @@ import {
   SiScikitlearn,
 } from "react-icons/si";
 import { FaDatabase, FaServer, FaCode } from "react-icons/fa";
-import { Variants } from "framer-motion";
 
 
 const skills = [

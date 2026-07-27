@@ -3,62 +3,27 @@
 import { profile } from "@/lib/data";
 import Image from "next/image";
 import { useEffect, useRef, useState, useCallback } from "react";
+import { GitHubActivity } from "./GitHubActivity";
 
 const services = [
   {
     icon: "/a1.svg",
-    title: "Scalable solutions",
+    title: "Production-ready builds",
     description:
-      "I can integrate new features, revamp content and adapt your project to follow the latest trends.",
+      "From requirements and data modeling to deployment on Linux VPS and cloud platforms — I deliver systems end to end, not just prototypes.",
   },
   {
     icon: "/a2.svg",
-    title: "Strategy",
+    title: "Real-time & payments",
     description:
-      "Data-driven development and growth strategies tailored to your brand. From planning to execution, I plan every move for maximum impact.",
+      "WebSockets, WebRTC voice rooms, live messaging, and payment/escrow integrations (Stripe, HesabPay) built into real products.",
   },
 ];
 
 const stats = [
   { number: 20, suffix: "+", label: "Finalized projects" },
-  { number: 5, suffix: "+", label: "Year of experience" },
+  { number: 5, suffix: "+", label: "Years of experience" },
 ];
-
-const months = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-
-function generateContributions() {
-  const weeks = 52;
-  const daysPerWeek = 7;
-  const data: { level: number; date: string; count: number }[][] = [];
-  const today = new Date();
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - (weeks * 7));
-
-  for (let w = 0; w < weeks; w++) {
-    const week: { level: number; date: string; count: number }[] = [];
-    for (let d = 0; d < daysPerWeek; d++) {
-      const rand = Math.random();
-      let level = 0;
-      if (rand > 0.4) level = 1;
-      if (rand > 0.65) level = 2;
-      if (rand > 0.85) level = 3;
-      if (rand > 0.95) level = 4;
-
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + (w * 7) + d);
-      const dateStr = date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-      const count = level > 0 ? level * Math.floor(Math.random() * 5 + 1) : 0;
-
-      week.push({ level, date: dateStr, count });
-    }
-    data.push(week);
-  }
-  return data;
-}
 
 // Scroll animation hook
 function useScrollAnimation() {
@@ -89,7 +54,6 @@ function useScrollAnimation() {
 // Animated counter hook
 function useCounter(end: number, duration: number = 1500, start: boolean = false) {
   const [count, setCount] = useState(0);
-  const countRef = useRef(0);
   const rafRef = useRef<number>(0);
 
   const animate = useCallback(() => {
@@ -101,10 +65,7 @@ function useCounter(end: number, duration: number = 1500, start: boolean = false
 
       // Ease out cubic
       const easeOut = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(easeOut * end);
-
-      countRef.current = current;
-      setCount(current);
+      setCount(Math.floor(easeOut * end));
 
       if (progress < 1) {
         rafRef.current = requestAnimationFrame(step);
@@ -126,196 +87,6 @@ function useCounter(end: number, duration: number = 1500, start: boolean = false
   }, [start, animate]);
 
   return count;
-}
-
-function ContributionCell({ day, weekIndex, dayIndex, isVisible }: { 
-  day: { level: number; date: string; count: number }; 
-  weekIndex: number; 
-  dayIndex: number;
-  isVisible: boolean;
-}) {
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  const getColor = (level: number) => {
-    const colors = [
-      "rgba(232, 232, 227, 0.06)",
-      "rgba(232, 232, 227, 0.18)",
-      "rgba(232, 232, 227, 0.35)",
-      "rgba(232, 232, 227, 0.60)",
-      "rgba(232, 232, 227, 0.90)",
-    ];
-    return colors[level];
-  };
-
-  return (
-    <div 
-      className="relative flex-shrink-0"
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
-    >
-      {/* Tooltip */}
-      {showTooltip && (
-        <div
-          className="absolute z-50 px-3 py-1.5 text-xs font-mono rounded-md pointer-events-none"
-          style={{
-            backgroundColor: "#ffffff",
-            color: "#1f2328",
-            left: "50%",
-            bottom: "calc(100% + 6px)",
-            transform: "translateX(-50%)",
-            whiteSpace: "nowrap",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.15)",
-            border: "1px solid rgba(0,0,0,0.1)",
-          }}
-        >
-          {day.count} contributions on {day.date}
-          {/* Arrow pointing down */}
-          <div
-            className="absolute left-1/2 top-full -translate-x-1/2"
-            style={{
-              width: 0,
-              height: 0,
-              borderLeft: "5px solid transparent",
-              borderRight: "5px solid transparent",
-              borderTop: "5px solid #ffffff",
-            }}
-          />
-        </div>
-      )}
-
-      {/* Cell */}
-      <div
-        className="transition-all duration-200 cursor-pointer"
-        style={{
-          width: "10px",
-          height: "10px",
-          backgroundColor: getColor(day.level),
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? "scale(1)" : "scale(0)",
-          transitionDelay: `${(weekIndex * 7 + dayIndex) * 1.5}ms`,
-        }}
-      />
-    </div>
-  );
-}
-
-function ContributionGraph() {
-  const [contributions] = useState(() => generateContributions());
-  const [visibleCells, setVisibleCells] = useState<Set<string>>(new Set());
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const cells: string[] = [];
-            contributions.forEach((week, wi) => {
-              week.forEach((_, di) => {
-                cells.push(`${wi}-${di}`);
-              });
-            });
-
-            cells.forEach((cell, index) => {
-              setTimeout(() => {
-                setVisibleCells((prev) => new Set([...prev, cell]));
-              }, index * 1.5);
-            });
-
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [contributions]);
-
-  const getColor = (level: number) => {
-    const colors = [
-      "rgba(232, 232, 227, 0.06)",
-      "rgba(232, 232, 227, 0.18)",
-      "rgba(232, 232, 227, 0.35)",
-      "rgba(232, 232, 227, 0.60)",
-      "rgba(232, 232, 227, 0.90)",
-    ];
-    return colors[level];
-  };
-
-  const totalContributions = contributions.flat().reduce((sum, day) => sum + day.count, 0);
-
-  const monthWeekIndices = [0, 4, 8, 13, 17, 22, 26, 30, 35, 39, 44, 48];
-
-  return (
-    <div ref={containerRef} className="w-full">
-      {/* Month labels row */}
-      <div className="flex gap-[2px] mb-1">
-        {contributions.map((_, weekIndex) => {
-          const monthIndex = monthWeekIndices.indexOf(weekIndex);
-          const month = monthIndex !== -1 ? months[monthIndex] : null;
-          return (
-            <div key={weekIndex} className="flex-shrink-0" style={{ width: "10px" }}>
-              {month && (
-                <span 
-                  className="text-[10px] font-mono whitespace-nowrap" 
-                  style={{ color: "rgba(232, 232, 227, 0.5)" }}
-                >
-                  {month}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Contribution grid */}
-      <div className="flex gap-[2px]">
-        {contributions.map((week, weekIndex) => (
-          <div key={weekIndex} className="flex flex-col gap-[2px]">
-            {week.map((day, dayIndex) => {
-              const cellKey = `${weekIndex}-${dayIndex}`;
-              const isVisible = visibleCells.has(cellKey);
-              return (
-                <ContributionCell
-                  key={dayIndex}
-                  day={day}
-                  weekIndex={weekIndex}
-                  dayIndex={dayIndex}
-                  isVisible={isVisible}
-                />
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* Legend */}
-      <div className="flex items-center justify-between mt-3">
-        <span className="text-[10px] font-mono" style={{ color: "rgba(232, 232, 227, 0.4)" }}>
-          {totalContributions.toLocaleString()} contributions in the past 365 days.
-        </span>
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] font-mono" style={{ color: "rgba(232, 232, 227, 0.4)" }}>Less</span>
-          {[0, 1, 2, 3, 4].map((level) => (
-            <div
-              key={level}
-              style={{
-                width: "10px",
-                height: "10px",
-                backgroundColor: getColor(level),
-              }}
-            />
-          ))}
-          <span className="text-[10px] font-mono" style={{ color: "rgba(232, 232, 227, 0.4)" }}>More</span>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 // Animated stat number component
@@ -343,8 +114,8 @@ export function About() {
   const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation();
 
   return (
-    <section 
-      id="about" 
+    <section
+      id="about"
       ref={sectionRef}
       className="bg-white py-24 text-black transition-all duration-1000"
       style={{
@@ -355,7 +126,7 @@ export function About() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6">
           {/* Left: Sticky Portrait - takes 2 columns */}
-          <div 
+          <div
             className="lg:col-span-2 lg:sticky lg:top-24 lg:self-start transition-all duration-1000 delay-200"
             style={{
               opacity: sectionVisible ? 1 : 0,
@@ -365,7 +136,7 @@ export function About() {
             <div className="relative aspect-[3/4] w-full max-w-xs overflow-hidden">
               <Image
                 src="/images/me.jpg"
-                alt={profile.name}
+                alt={`Portrait of ${profile.name}`}
                 fill
                 className="object-cover grayscale"
               />
@@ -388,7 +159,7 @@ export function About() {
           </div>
 
           {/* Right: Scrollable Content - takes 3 columns */}
-          <div 
+          <div
             className="lg:col-span-3 flex flex-col min-w-0 transition-all duration-1000 delay-400"
             style={{
               opacity: sectionVisible ? 1 : 0,
@@ -407,23 +178,24 @@ export function About() {
                 About
               </h2>
               <p className="text-lg leading-relaxed text-neutral-800">
-                Software Developer and IT professional with 5 years of experience
-                in software development, including 3 years of web development,
-                1 year of mobile app development, and 1 year of database design
-                and management.
+                I&apos;m {profile.name}, a full-stack software developer based in{" "}
+                {profile.location}, with 5+ years of experience designing, building,
+                and deploying production web, mobile, and desktop applications.
               </p>
               <p className="text-lg leading-relaxed text-neutral-800">
-                Full-stack developer skilled in Python, JavaScript, React,
-                Vue.js, Node.js, Django, Flask, and Swift/SwiftUI. Experienced
-                in building REST APIs, real-time applications, database design,
-                and AI/LLM integration.
+                I work across TypeScript/JavaScript (Next.js, React, Vue/Nuxt,
+                Node.js), Python (Django, Flask, FastAPI), and Swift/SwiftUI —
+                with hands-on experience in real-time systems (WebSockets, WebRTC),
+                payment and escrow integrations, database design, AI/LLM
+                integration, and end-to-end deployment on Linux VPS and cloud
+                platforms.
               </p>
             </div>
 
             {/* Services - icon in black box using Image component */}
             <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2">
               {services.map((service, index) => (
-                <div 
+                <div
                   key={service.title}
                   className="transition-all duration-700"
                   style={{
@@ -439,7 +211,7 @@ export function About() {
                   >
                     <Image
                       src={service.icon}
-                      alt={service.title}
+                      alt=""
                       width={20}
                       height={20}
                       className="w-5 h-5"
@@ -456,8 +228,8 @@ export function About() {
               ))}
             </div>
 
-            {/* Stats + Contribution Graph */}
-            <div 
+            {/* Stats + Live GitHub Activity */}
+            <div
               ref={statsRef}
               className="mt-16 transition-all duration-700"
               style={{
@@ -479,7 +251,7 @@ export function About() {
               </div>
 
               <div className="mt-8 p-4 overflow-x-auto" style={{ backgroundColor: "#0d1117" }}>
-                <ContributionGraph />
+                <GitHubActivity />
               </div>
             </div>
           </div>

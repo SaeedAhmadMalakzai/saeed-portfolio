@@ -41,11 +41,20 @@ function useScrambleText(originalText: string) {
 const metalClickSoundDataUri =
   "data:audio/mpeg;base64,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";
 
+type AudioWindow = Window & { webkitAudioContext?: typeof AudioContext };
+
+function getAudioContext(): AudioContext {
+  const win = window as AudioWindow;
+  const Ctor = window.AudioContext || win.webkitAudioContext;
+  if (!Ctor) throw new Error("Web Audio API unavailable");
+  return new Ctor();
+}
+
 function useMetalClick() {
   const bufferRef = useRef<AudioBuffer | null>(null);
 
   useEffect(() => {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const ctx = getAudioContext();
     fetch(metalClickSoundDataUri)
       .then((r) => r.arrayBuffer())
       .then((ab) => ctx.decodeAudioData(ab))
@@ -55,7 +64,7 @@ function useMetalClick() {
 
   const play = useCallback(() => {
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = getAudioContext();
       if (ctx.state === "suspended") ctx.resume();
       const source = ctx.createBufferSource();
       const gain = ctx.createGain();
@@ -249,7 +258,7 @@ export function Contact() {
     if (!lastName || lastName.trim() === "") newErrors.lastName = "Last name is required";
     if (!email || email.trim() === "") newErrors.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = "Invalid email address";
-    if (!message || message.trim() === "") newErrors.message = "Tell us more about what you need";
+    if (!message || message.trim() === "") newErrors.message = "Tell me more about what you need";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -257,7 +266,10 @@ export function Contact() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    // Capture the form element before any await — React nulls currentTarget
+    // after the handler's synchronous phase.
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     if (!validateForm(formData)) { setStatus("error"); return; }
     setStatus("loading");
     const body = {
@@ -273,7 +285,7 @@ export function Contact() {
       if (!res.ok) throw new Error("Failed to send");
       setStatus("success");
       setErrors({});
-      e.currentTarget.reset();
+      form.reset();
     } catch { setStatus("error"); }
   }
 
@@ -311,12 +323,12 @@ export function Contact() {
             <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <input id="firstName" name="firstName" placeholder="First Name*"
+                  <input id="firstName" name="firstName" placeholder="First Name*" aria-label="First name" autoComplete="given-name"
                     className="w-full bg-transparent border-b border-black/20 pb-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-black/60 transition-colors" />
                   {errors.firstName && <p className="text-xs text-[#e74c3c] mt-2">{errors.firstName}</p>}
                 </div>
                 <div>
-                  <input id="lastName" name="lastName" placeholder="Last Name*"
+                  <input id="lastName" name="lastName" placeholder="Last Name*" aria-label="Last name" autoComplete="family-name"
                     className="w-full bg-transparent border-b border-black/20 pb-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-black/60 transition-colors" />
                   {errors.lastName && <p className="text-xs text-[#e74c3c] mt-2">{errors.lastName}</p>}
                 </div>
@@ -324,18 +336,18 @@ export function Contact() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <input id="email" name="email" type="email" placeholder="Email*"
+                  <input id="email" name="email" type="email" placeholder="Email*" aria-label="Email address" autoComplete="email"
                     className="w-full bg-transparent border-b border-black/20 pb-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-black/60 transition-colors" />
                   {errors.email && <p className="text-xs text-[#e74c3c] mt-2">{errors.email}</p>}
                 </div>
                 <div>
-                  <input id="company" name="company" placeholder="Company"
+                  <input id="company" name="company" placeholder="Company" aria-label="Company" autoComplete="organization"
                     className="w-full bg-transparent border-b border-black/20 pb-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-black/60 transition-colors" />
                 </div>
               </div>
 
               <div>
-                <select id="budget" name="budget" defaultValue=""
+                <select id="budget" name="budget" defaultValue="" aria-label="Budget range"
                   className="w-full bg-transparent border-b border-black/20 pb-3 text-sm text-black/40 focus:outline-none focus:border-black/60 transition-colors appearance-none cursor-pointer">
                   <option value="" disabled>budget range *</option>
                   <option value="< $5k">Less than $5,000</option>
@@ -347,7 +359,7 @@ export function Contact() {
               </div>
 
               <div>
-                <textarea id="message" name="message" placeholder="Tell us more about what you need*" rows={4}
+                <textarea id="message" name="message" placeholder="Tell me more about what you need*" aria-label="Message" rows={4}
                   className="w-full bg-transparent border-b border-black/20 pb-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-black/60 transition-colors resize-none" />
                 {errors.message && <p className="text-xs text-[#e74c3c] mt-2">{errors.message}</p>}
               </div>
