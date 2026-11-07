@@ -16,7 +16,7 @@ const processes = [
     title: "Discovery & Strategy",
     description:
       "I start by understanding your goals, users, and constraints. Through research and planning, I define a clear roadmap that aligns technology with business outcomes — so every decision is intentional.",
-    image: "/images/projects/erp-stock.jpg",
+    image: "/images/projects/kaar.jpg",
   },
   {
     id: 2,

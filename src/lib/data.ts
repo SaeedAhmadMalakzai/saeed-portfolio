@@ -108,64 +108,6 @@ export const projects: Project[] = [
     platform: "Android · iOS",
   },
   {
-    slug: "bright-imperial-crm",
-    title: "Student CRM & Admissions System — Bright Imperial",
-    shortTitle: "Bright Imperial\nAdmissions CRM",
-    description:
-      "Management system for a Kabul study-abroad consultancy. It tracks every student from first inquiry through contract, university application, interview, deposit and embassy appointment to visa, with separate portals for the CEO, counsellors and students.",
-    highlights: [
-      "Built the full admissions pipeline with role-based permissions, student documents and a dashboard for each portal",
-      "Hardened sign-in with per-email and per-IP throttling backed by Redis, and fails closed when the rate limiter is missing in production",
-      "Guarded personal-data exports behind their own permission and neutralised spreadsheet formula injection in CSV downloads",
-    ],
-    image: "/images/projects/bi-mis.jpg",
-    tags: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth", "Upstash Redis", "Vitest"],
-    liveUrl: "https://bright-imperial-mis.vercel.app",
-    client: "Bright Imperial Educational Consultancy",
-    featured: true,
-    platform: "Web",
-  },
-  {
-    slug: "galaxy-power-erp",
-    title: "Galaxy Power ERP — Business System for a Solar Trading Company",
-    shortTitle: "Galaxy Power\nERP",
-    description:
-      "Production ERP for a solar panel, battery and generator trading company in Kabul: sales, purchasing and imports, stock, finance, shareholders and reports on one double-entry ledger where every mistake is corrected with a visible reversal.",
-    highlights: [
-      "Built invoicing with partial and credit payments, installment plans, returns and printed invoices",
-      "Implemented FIFO stock costing with good and damaged stock, serial numbers, transfers, counts and warranty claims",
-      "Added multi-currency books (AFN, USD, CNY) with revaluation, month and year-end closing, profit and loss reports, Excel exports and a full audit trail",
-    ],
-    image: "/images/projects/erp-stock.jpg",
-    gallery: [
-      shot("/images/projects/erp-stock.jpg", "Stock on hand by product, location and condition (demo data)"),
-      shot("/images/projects/erp-profitability.jpg", "Profitability report with revenue, cost and gross profit (demo data)"),
-      shot("/images/projects/erp-sale.jpg", "A sale with its payments and stock movements (demo data)"),
-    ],
-    tags: ["Django", "Django REST", "React 19", "Vite", "PostgreSQL", "Celery", "Docker"],
-    client: "Galaxy Power",
-    featured: true,
-    platform: "Web",
-  },
-  {
-    slug: "kankorpass",
-    title: "KankorPass — Kankor Preparation System",
-    shortTitle: "KankorPass\nExam Prep",
-    description:
-      "Trilingual (English, Pashto, Dari) exam-prep platform for Afghanistan's university entrance exam, with practice, mock and proctored exams, a 3D study coach and goal tracking against real university cutoff data.",
-    highlights: [
-      "Built practice, mock and webcam-proctored exams with on-device face detection and focus and fullscreen checks",
-      "Created an animated 3D study coach with voice guidance and guided tours, lazy-loaded and scaled down for low-end devices",
-      "Implemented subscriptions, a study planner, a leaderboard and goal tracking against university cutoffs",
-    ],
-    image: "/images/projects/kankor.jpg",
-    fullImage: "/images/projects/kankor-full.jpg",
-    tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "TensorFlow.js", "Three.js", "PostgreSQL"],
-    liveUrl: "https://kankorpass.vercel.app",
-    featured: true,
-    platform: "Web",
-  },
-  {
     slug: "peygham",
     title: "Peygham — End-to-End Encrypted Messenger (Android)",
     shortTitle: "Peygham\nMessenger",
@@ -193,24 +135,6 @@ export const projects: Project[] = [
     platform: "Android",
   },
   {
-    slug: "bright-imperial-website",
-    title: "Bright Imperial — Study Abroad Consultancy Website",
-    shortTitle: "Bright Imperial\nWebsite",
-    description:
-      "Public website for a Kabul education consultancy that guides Afghan students to universities in Europe and Asia: destinations, a searchable university directory, scholarships and study guides.",
-    highlights: [
-      "Built a searchable university directory and destination guides with structured data for search engines",
-      "Wrote short answer blocks for the questions students and parents ask most",
-      "Shows only verified testimonials, staff and figures, filtered at the data layer",
-    ],
-    image: "/images/projects/bi-website.jpg",
-    fullImage: "/images/projects/bi-website-full.jpg",
-    tags: ["Next.js 16", "TypeScript", "Tailwind CSS", "Playwright"],
-    liveUrl: "https://brightimperial.vercel.app",
-    client: "Bright Imperial Educational Consultancy",
-    platform: "Web",
-  },
-  {
     slug: "afghan-scholarships",
     title: "Afghanistan Scholarship Portal",
     shortTitle: "Scholarship\nPortal",
@@ -225,6 +149,7 @@ export const projects: Project[] = [
     fullImage: "/images/projects/scholarships-full.jpg",
     tags: ["React", "Vite", "Tailwind CSS", "Node.js", "Express", "REST APIs"],
     liveUrl: "https://scholarshipsportal.netlify.app",
+    featured: true,
     platform: "Web",
   },
   {
@@ -242,6 +167,7 @@ export const projects: Project[] = [
     fullImage: "/images/projects/kaar-full.jpg",
     tags: ["Next.js 16", "React 19", "TypeScript", "Drizzle ORM", "PostgreSQL", "Redis", "Docker"],
     liveUrl: "https://kaar-af.vercel.app",
+    featured: true,
     platform: "Web",
   },
   {
@@ -261,6 +187,7 @@ export const projects: Project[] = [
     downloadUrl: "https://find-filter-tenders-afg.vercel.app/find-filter-tenders-afg-4.4.1.zip",
     downloadLabel: "Download .zip",
     repoUrl: "https://github.com/SaeedAhmadMalakzai/opportunity-scanner",
+    featured: true,
     platform: "Chrome extension",
   },
   {

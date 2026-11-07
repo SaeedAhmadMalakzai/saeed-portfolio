@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Web, Android, iOS, macOS and browser-extension projects: SayHello, 24Tabib, Galaxy Power ERP, KankorPass, Peygham, JobPulse, Find&Filter_Tenders-Afg and more.",
+    "Web, Android, iOS, macOS and browser-extension projects: SayHello, 24Tabib, Peygham, Kaar.af, JobPulse, Find&Filter_Tenders-Afg and more.",
 };
 
 export default function ProjectsPage() {

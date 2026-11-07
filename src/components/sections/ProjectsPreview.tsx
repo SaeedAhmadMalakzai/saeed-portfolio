@@ -9,8 +9,8 @@ import { getFeaturedProjects } from "@/lib/data";
 const projects = getFeaturedProjects(6).map((project, index) => ({
   id: index + 1,
   title: project.shortTitle ?? project.title,
-  image: project.fullImage ?? project.image ?? "/images/projects/kankor.jpg",
-  thumb: project.image ?? "/images/projects/kankor.jpg",
+  image: project.fullImage ?? project.image ?? "/images/projects/sayhello-cover.jpg",
+  thumb: project.image ?? "/images/projects/sayhello-cover.jpg",
   hasFullPage: Boolean(project.fullImage),
   tags: project.tags.slice(0, 4),
   href: `/projects/${project.slug}`,
