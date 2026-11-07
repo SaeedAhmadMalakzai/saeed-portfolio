@@ -65,6 +65,7 @@ export const projects: Project[] = [
     screens: [
       shot("/images/projects/sayhello-09-welcome.jpg", "Welcome screen"),
       shot("/images/projects/sayhello-01-speak.jpg", "Speak: live voice rooms to join"),
+      shot("/images/projects/sayhello-02-room.jpg", "Inside a live voice room: five people on stage and the chat"),
       shot("/images/projects/sayhello-03-chats.jpg", "Chats with language partners"),
       shot("/images/projects/sayhello-04-thread.jpg", "A chat with a correction card and a voice message"),
       shot("/images/projects/sayhello-05-sparks.jpg", "Partner suggestions and short posts with translation"),
