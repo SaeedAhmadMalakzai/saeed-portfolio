@@ -60,10 +60,11 @@ const android = sized(600, 1336);
 const popup = sized(600, 750);
 const macWindow = sized(1600, 1057);
 
-/** Display order: mobile apps, web platforms, tools, then contributions and the archive */
+/** Display order: mobile apps, web platforms, tools, then contributions */
 export const projects: Project[] = [
   {
     slug: "24tabib",
+    app: { type: "MobileApplication", operatingSystem: "Android, iOS", category: "HealthApplication" },
     title: "24Tabib — Health App for Afghanistan (Android & iOS)",
     name: "24Tabib",
     kicker: "Android · iOS · Health",
@@ -105,6 +106,7 @@ export const projects: Project[] = [
   },
   {
     slug: "sayhello",
+    app: { type: "MobileApplication", operatingSystem: "iOS", category: "EducationalApplication" },
     title: "SayHello — Language Exchange App (iOS)",
     name: "SayHello",
     kicker: "iOS · Language exchange",
@@ -145,6 +147,7 @@ export const projects: Project[] = [
   },
   {
     slug: "peygham",
+    app: { type: "MobileApplication", operatingSystem: "Android", category: "CommunicationApplication" },
     title: "Peygham — End-to-End Encrypted Messenger (Android)",
     name: "Peygham",
     kicker: "Android · Messenger",
@@ -182,6 +185,7 @@ export const projects: Project[] = [
   },
   {
     slug: "kaar",
+    app: { type: "WebApplication", operatingSystem: "Web", category: "BusinessApplication" },
     title: "Kaar.af — Work Marketplace",
     name: "Kaar.af",
     kicker: "Web · Work marketplace",
@@ -209,6 +213,7 @@ export const projects: Project[] = [
   },
   {
     slug: "afghan-scholarships",
+    app: { type: "WebApplication", operatingSystem: "Web", category: "EducationalApplication" },
     title: "Afghanistan Scholarship Portal",
     name: "Afghanistan Scholarship Portal",
     kicker: "Web · Education",
@@ -236,6 +241,7 @@ export const projects: Project[] = [
   },
   {
     slug: "ai-site-builder",
+    app: { type: "WebApplication", operatingSystem: "Web", category: "DeveloperApplication" },
     title: "AI Site Builder — Describe a Website, Get the Code",
     name: "AI Site Builder",
     kicker: "Web · AI tool",
@@ -261,6 +267,7 @@ export const projects: Project[] = [
   },
   {
     slug: "find-filter-tenders",
+    app: { type: "SoftwareApplication", operatingSystem: "Chrome", category: "BusinessApplication" },
     title: "Find&Filter_Tenders-Afg — Tender Finder (Chrome Extension)",
     name: "Find&Filter_Tenders-Afg",
     kicker: "Chrome extension · Tenders",
@@ -295,6 +302,7 @@ export const projects: Project[] = [
   },
   {
     slug: "jobpulse",
+    app: { type: "SoftwareApplication", operatingSystem: "macOS", category: "BusinessApplication" },
     title: "JobPulse — Job Search Assistant (macOS)",
     name: "JobPulse",
     kicker: "macOS · Job search",
@@ -327,6 +335,7 @@ export const projects: Project[] = [
   },
   {
     slug: "calculator-android",
+    app: { type: "MobileApplication", operatingSystem: "Android", category: "UtilitiesApplication" },
     title: "Calculator_Android — Scientific Calculator",
     name: "Calculator_Android",
     kicker: "Android · Utility",
@@ -360,6 +369,7 @@ export const projects: Project[] = [
   },
   {
     slug: "appra",
+    app: { type: "WebSite", operatingSystem: "Web", category: "BusinessApplication" },
     title: "Appra — Digital Agency Website",
     name: "Appra",
     kicker: "Web · Agency site",
@@ -381,52 +391,6 @@ export const projects: Project[] = [
       { label: "Built with", value: "Next.js 16, TypeScript and Supabase" },
     ],
     contribution: "Contributor",
-  },
-  {
-    slug: "hire",
-    title: "Hire.af — Hiring Platform",
-    name: "Hire.af",
-    kicker: "Web · Hiring",
-    tagline: "A two-sided hiring platform for Afghan talent and employers.",
-    summary: "Talent, employer and admin portals with identity checks and milestone escrow.",
-    description:
-      "Two-sided hiring platform connecting Afghan talent with employers: separate talent, employer and admin portals with staged identity checks, milestone escrow and dispute resolution.",
-    highlights: [
-      "Implemented role-based access, OAuth and password sign-in, and private file storage served through authenticated proxies",
-      "Integrated card and local mobile-wallet payments with milestone escrow and dispute resolution",
-      "Completed a full security remediation (escrow integrity, identity-data exposure, SSRF, session revocation) plus structured data and accessibility passes",
-    ],
-    image: "/images/projects/hire.png",
-    tags: ["Next.js", "React", "TypeScript", "MongoDB", "NextAuth", "Stripe", "HesabPay"],
-    status: { label: "Archived", tone: "archive" },
-    facts: [
-      { label: "Built with", value: "Next.js, React, TypeScript and MongoDB" },
-      { label: "Payments", value: "Card and mobile wallet, with milestone escrow" },
-    ],
-    archived: true,
-  },
-  {
-    slug: "jirga",
-    title: "Jirga — Community Forum for Afghanistan",
-    name: "Jirga",
-    kicker: "Web · Community",
-    tagline: "A community forum for Afghanistan.",
-    summary: "Communities, threaded comments, voting, polls and a moderation queue.",
-    description:
-      "Community forum with topic communities, threaded comments, voting, notifications, a moderation queue, polls, awards and media uploads, protected by hardened Firestore security rules.",
-    highlights: [
-      "Built communities, threaded comments, voting and notifications",
-      "Implemented a moderation queue, polls, awards and media uploads",
-      "Hardened Firestore security rules for sign-in, storage and data access",
-    ],
-    image: "/images/projects/jirga.png",
-    tags: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4", "Firebase", "Docker"],
-    status: { label: "Archived", tone: "archive" },
-    facts: [
-      { label: "Built with", value: "Next.js 16, React 19 and Firebase" },
-      { label: "Security", value: "Hardened Firestore rules" },
-    ],
-    archived: true,
   },
 ];
 

@@ -42,7 +42,7 @@ export function About() {
 
         <div className="min-w-0">
           <p className="max-w-[34ch] text-[clamp(24px,2.4vw,32px)] font-semibold leading-[1.3] tracking-[-0.02em]">
-            I’m Saeed, a full-stack and mobile developer in Kabul. For more than five years I have designed, built and
+            I’m Saeed Ahmad Malakzai, a full-stack and mobile developer in Kabul. For more than five years I have designed, built and
             shipped web, mobile and desktop apps from start to finish.
           </p>
           <p className="mt-6 max-w-[62ch] text-lg leading-[1.65] text-[var(--ink-2)]">

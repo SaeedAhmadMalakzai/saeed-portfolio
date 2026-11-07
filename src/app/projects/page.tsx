@@ -2,18 +2,20 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { TileGrid } from "@/components/showcase/ProjectTile";
 import { ShelfHead } from "@/components/showcase/ShelfHead";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getShelf, projects } from "@/lib/data";
+import { pageMetadata } from "@/lib/site";
+import { graph, projectsPageNodes } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Projects",
   description:
-    "Android, iOS, web, macOS and Chrome extension projects: 24Tabib, SayHello, Peygham, Kaar.af, Find&Filter_Tenders-Afg, JobPulse and more.",
-  alternates: { canonical: "/projects" },
-};
+    "Every project by Saeed Ahmad Malakzai: Android and iOS apps like 24Tabib, SayHello and Peygham, web platforms like Kaar.af, and tools for Chrome, macOS and Android.",
+  path: "/projects",
+});
 
 export default function ProjectsPage() {
   const web = [...getShelf("web"), ...projects.filter((project) => project.contribution)];
-  const archive = projects.filter((project) => project.archived);
   const shelves = [
     { id: "mobile", title: "Mobile apps", note: "Android · iOS", items: getShelf("mobile") },
     { id: "web", title: "Web platforms", note: "Live sites", items: web },
@@ -22,6 +24,7 @@ export default function ProjectsPage() {
 
   return (
     <main id="main" className="wrap pb-24">
+      <JsonLd data={graph(...projectsPageNodes())} />
       <p className="mt-6">
         <Link href="/" className="lnk border-b font-normal">
           ← Home
@@ -31,7 +34,7 @@ export default function ProjectsPage() {
         All projects
       </h1>
       <p className="mt-5 max-w-[44ch] text-[clamp(19px,2vw,24px)] leading-[1.4] text-[var(--ink-3)]">
-        {projects.length} projects: apps you can download, sites you can visit, small tools, and older work.
+        {projects.length} projects: apps you can download, sites you can visit and small tools.
       </p>
 
       {shelves.map((shelf) => (
@@ -40,13 +43,6 @@ export default function ProjectsPage() {
           <TileGrid projects={shelf.items} />
         </section>
       ))}
-
-      {archive.length > 0 && (
-        <section id="archive" aria-labelledby="archive-title">
-          <ShelfHead id="archive-title" title="Archive" note="No live site or public code right now" count={archive.length} />
-          <TileGrid projects={archive} />
-        </section>
-      )}
     </main>
   );
 }

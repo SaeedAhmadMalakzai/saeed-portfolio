@@ -33,12 +33,12 @@ export function Hero() {
       className="wrap grid grid-cols-[repeat(auto-fit,minmax(min(100%,460px),1fr))] items-center gap-12 pt-10 pb-14"
     >
       <div>
-        <p className="label mb-6 text-[13px]">Saeed Ahmad Malakzai · Kabul</p>
-        <h1
-          id="hero-title"
-          className="text-[clamp(44px,6.4vw,96px)] font-black leading-[0.9] tracking-[-0.05em]"
-        >
-          I build apps people in Afghanistan use every day.
+        {/* The name sits inside the main heading so search engines tie the page to it */}
+        <h1 id="hero-title">
+          <span className="label mb-6 block text-[13px] font-normal">Saeed Ahmad Malakzai · Kabul</span>
+          <span className="block text-[clamp(44px,6.4vw,96px)] font-black leading-[0.9] tracking-[-0.05em]">
+            I build apps people in Afghanistan use every day.
+          </span>
         </h1>
         <p className="mt-7 max-w-[40ch] text-[19px] leading-[1.55] text-[var(--ink-3)]">
           Native Android and iOS apps, web platforms and small tools. {downloadCount()} of them you can download today.

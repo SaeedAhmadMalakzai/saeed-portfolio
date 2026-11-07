@@ -40,7 +40,7 @@ type Props = {
   project: Project;
 };
 
-/** A web platform, tool or archived project: picture, name, one line, status and a link */
+/** A web platform, tool or contribution: picture, name, one line, status and a link */
 export function ProjectTile({ project }: Props) {
   const href = `/projects/${project.slug}`;
   const action = tileLink(project);

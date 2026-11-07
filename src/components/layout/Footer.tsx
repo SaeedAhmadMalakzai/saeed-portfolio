@@ -5,7 +5,6 @@ const BUILD_YEAR = new Date().getFullYear();
 
 export function Footer() {
   const contributions = projects.filter((project) => project.contribution);
-  const archive = projects.filter((project) => project.archived);
   const phoneHref = profile.phone ? `tel:${profile.phone.replace(/\s+/g, "")}` : undefined;
 
   return (
@@ -34,21 +33,6 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
-          {archive.length > 0 && (
-            <div>
-              <h2 className="label mb-2">Archive</h2>
-              <p>
-                {archive.map((project, index) => (
-                  <span key={project.slug}>
-                    {index > 0 && " · "}
-                    <Link href={`/projects/${project.slug}`} className="underline underline-offset-4 hover:text-[var(--muted)]">
-                      {project.name}
-                    </Link>
-                  </span>
-                ))}
-              </p>
             </div>
           )}
         </div>

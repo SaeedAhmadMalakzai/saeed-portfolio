@@ -18,8 +18,8 @@ export interface Screenshot {
 /** Which shelf of the home page a project sits on */
 export type Shelf = "mobile" | "web" | "tools";
 
-/** Colour of the status dot: live site, download, coming soon, open source, archived */
-export type StatusTone = "live" | "download" | "soon" | "source" | "archive";
+/** Colour of the status dot: live site, download, coming soon, open source */
+export type StatusTone = "live" | "download" | "soon" | "source";
 
 export interface ProjectStatus {
   label: string;
@@ -29,6 +29,15 @@ export interface ProjectStatus {
 export interface ProjectFact {
   label: string;
   value: string;
+}
+
+/** How search engines and AI assistants should read a project (schema.org) */
+export interface ProjectApp {
+  type: "MobileApplication" | "WebApplication" | "SoftwareApplication" | "WebSite";
+  /** e.g. "Android, iOS", "Chrome", "macOS", "Web" */
+  operatingSystem: string;
+  /** One of schema.org's application categories, e.g. "HealthApplication" */
+  category: string;
 }
 
 export interface Project {
@@ -65,12 +74,11 @@ export interface Project {
   downloadLabel?: string;
   status: ProjectStatus;
   facts?: ProjectFact[];
-  /** Omitted for contributions and archived work */
+  /** Omitted for contributions */
   shelf?: Shelf;
   /** Work on someone else's product */
   contribution?: string;
-  /** No live site or public code at the moment */
-  archived?: boolean;
+  app: ProjectApp;
 }
 
 export interface Education {

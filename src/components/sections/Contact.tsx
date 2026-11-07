@@ -3,11 +3,16 @@
 import { useState } from "react";
 import { profile, socialLinks } from "@/lib/data";
 import { ShelfHead } from "@/components/showcase/ShelfHead";
+import type { ContactFormData } from "@/types";
 
 type Status = "idle" | "sending" | "sent" | "failed";
 type FieldErrors = Partial<Record<"firstName" | "lastName" | "email" | "message", string>>;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Web3Forms takes the message from the browser and emails it to the inbox the key belongs to */
+const WEB3FORMS_URL = "https://api.web3forms.com/submit";
+const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
 
 const BUDGETS = [
   { value: "< $5k", label: "Less than $5,000" },
@@ -23,6 +28,32 @@ const FIELD =
 function text(formData: FormData, name: string): string {
   const value = formData.get(name);
   return typeof value === "string" ? value.trim() : "";
+}
+
+/** Web3Forms answers {"success": true} only when the email went out */
+function wasDelivered(answer: unknown): boolean {
+  return typeof answer === "object" && answer !== null && (answer as { success?: unknown }).success === true;
+}
+
+async function sendMessage(fields: ContactFormData): Promise<void> {
+  if (!ACCESS_KEY) throw new Error("The contact form has no Web3Forms key");
+  const name = `${fields.firstName} ${fields.lastName}`;
+  const res = await fetch(WEB3FORMS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      access_key: ACCESS_KEY,
+      subject: `Portfolio contact from ${name}`,
+      from_name: name,
+      name,
+      email: fields.email,
+      company: fields.company || "Not given",
+      budget: fields.budget || "Not sure yet",
+      message: fields.message,
+    }),
+  });
+  const answer: unknown = await res.json().catch(() => null);
+  if (!res.ok || !wasDelivered(answer)) throw new Error(`Web3Forms answered ${res.status}`);
 }
 
 function validate(formData: FormData): FieldErrors {
@@ -74,25 +105,27 @@ export function Contact() {
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
-    setStatus("sending");
-    const body = {
-      firstName: text(formData, "firstName"),
-      lastName: text(formData, "lastName"),
-      email: text(formData, "email"),
-      company: text(formData, "company"),
-      budget: text(formData, "budget"),
-      message: text(formData, "message"),
-    };
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) throw new Error(`Contact API answered ${res.status}`);
+    // A bot filled the hidden box: look sent, send nothing
+    if (formData.get("botcheck")) {
       setStatus("sent");
       form.reset();
-    } catch {
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      await sendMessage({
+        firstName: text(formData, "firstName"),
+        lastName: text(formData, "lastName"),
+        email: text(formData, "email"),
+        company: text(formData, "company"),
+        budget: text(formData, "budget"),
+        message: text(formData, "message"),
+      });
+      setStatus("sent");
+      form.reset();
+    } catch (error: unknown) {
+      console.error("Contact form failed to send", error);
       setStatus("failed");
     }
   }
@@ -127,6 +160,7 @@ export function Contact() {
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="grid gap-7">
+          <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
           <div className="grid gap-7 sm:grid-cols-2">
             <Field id="firstName" label="First name" required error={errors.firstName}>
               <input

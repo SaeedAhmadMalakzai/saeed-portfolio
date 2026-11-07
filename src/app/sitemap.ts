@@ -1,18 +1,32 @@
 import type { MetadataRoute } from "next";
 import { projects } from "@/lib/data";
+import { CONTENT_UPDATED, absoluteUrl } from "@/lib/site";
 
-const SITE_URL = "https://saeedmalakzai.vercel.app";
+const LAST_MODIFIED = new Date(CONTENT_UPDATED);
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["", "/projects"].map((path) => ({
-    url: `${SITE_URL}${path}`,
+  const home = {
+    url: absoluteUrl("/"),
+    lastModified: LAST_MODIFIED,
     changeFrequency: "monthly" as const,
-    priority: path === "" ? 1 : 0.8,
-  }));
+    priority: 1,
+    images: [absoluteUrl("/og.jpg"), absoluteUrl("/images/saeed-illustration.jpg")],
+  };
+  const projectsPage = {
+    url: absoluteUrl("/projects"),
+    lastModified: LAST_MODIFIED,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  };
+  // Each project page lists its cover and screenshots, so they can appear in image search
   const projectPages = projects.map((project) => ({
-    url: `${SITE_URL}/projects/${project.slug}`,
+    url: absoluteUrl(`/projects/${project.slug}`),
+    lastModified: LAST_MODIFIED,
     changeFrequency: "monthly" as const,
-    priority: 0.6,
+    priority: project.shelf === "mobile" ? 0.8 : 0.6,
+    images: [project.image, ...(project.screens ?? []).map((s) => s.src), ...(project.gallery ?? []).map((s) => s.src)]
+      .filter((src): src is string => Boolean(src))
+      .map(absoluteUrl),
   }));
-  return [...pages, ...projectPages];
+  return [home, projectsPage, ...projectPages];
 }

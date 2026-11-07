@@ -5,7 +5,6 @@ const DOT_COLOUR: Record<StatusTone, string> = {
   download: "var(--download)",
   soon: "var(--soon)",
   source: "var(--source)",
-  archive: "var(--archive)",
 };
 
 type Props = {

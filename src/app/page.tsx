@@ -1,11 +1,17 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 import { AppBand } from "@/components/showcase/AppBand";
 import { Hero } from "@/components/showcase/Hero";
 import { TileGrid } from "@/components/showcase/ProjectTile";
 import { ShelfHead } from "@/components/showcase/ShelfHead";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getShelf, projects } from "@/lib/data";
+import { SITE_DESCRIPTION, SITE_TITLE, pageMetadata } from "@/lib/site";
+import { graph, homeNodes } from "@/lib/structured-data";
+
+export const metadata: Metadata = pageMetadata({ title: SITE_TITLE, description: SITE_DESCRIPTION, path: "/" });
 
 export default function Home() {
   const mobile = getShelf("mobile");
@@ -15,6 +21,7 @@ export default function Home() {
 
   return (
     <main id="main">
+      <JsonLd data={graph(...homeNodes())} />
       <Hero />
 
       <section id="mobile" aria-labelledby="mobile-title" className="wrap">
@@ -41,7 +48,7 @@ export default function Home() {
                 <Link href={`/projects/${project.slug}`} className="underline underline-offset-4 hover:text-[var(--ink)]">
                   {project.name}
                 </Link>
-                {project.contribution ? " (contribution)" : project.archived ? " (archive)" : ""}
+                {project.contribution ? " (contribution)" : ""}
               </span>
             ))}
             .{" "}

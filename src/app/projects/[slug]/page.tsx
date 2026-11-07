@@ -8,6 +8,9 @@ import { BrowserFrame, BrowserShot, ScrollingPage, hostOf } from "@/components/s
 import { Phone, PhoneRow } from "@/components/showcase/Phone";
 import { StatusPill } from "@/components/showcase/StatusPill";
 import { OutLink, primaryLink, secondaryLinks } from "@/components/showcase/links";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { pageMetadata } from "@/lib/site";
+import { graph, projectPageNodes } from "@/lib/structured-data";
 import type { Project, Screenshot } from "@/types";
 
 interface ProjectPageProps {
@@ -15,6 +18,8 @@ interface ProjectPageProps {
 }
 
 const PORTRAIT_STAGE_ITEMS = 2;
+/** Every project cover is made at this size */
+const COVER_SIZE = { width: 1600, height: 1000 };
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -24,12 +29,13 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return {};
-  return {
+  return pageMetadata({
     title: project.title,
     description: project.description,
-    alternates: { canonical: `/projects/${project.slug}` },
-    openGraph: project.image ? { images: [project.image] } : undefined,
-  };
+    path: `/projects/${project.slug}`,
+    image: project.image ? { url: project.image, ...COVER_SIZE } : undefined,
+    imageAlt: `${project.name}: ${project.tagline}`,
+  });
 }
 
 function isPortrait(shot: Screenshot): boolean {
@@ -178,6 +184,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <main id="main">
+      <JsonLd data={graph(...projectPageNodes(project))} />
       <div className="wrap">
         <p className="mt-6">
           <Link href="/projects" className="lnk border-b font-normal">
