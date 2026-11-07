@@ -6,10 +6,11 @@ import { profile } from "@/lib/data";
 import gsap from "gsap";
 
 const images = [
-  "/images/projects/kankorpass.jpg",
-  "/images/projects/kaar.png",
-  "/images/projects/rahnaward.jpg",
-  "/images/projects/jirga.png",
+  "/images/projects/sayhello-cover.jpg",
+  "/images/projects/24tabib-cover.jpg",
+  "/images/projects/kankor.jpg",
+  "/images/projects/bi-mis.jpg",
+  "/images/projects/peygham-cover.jpg",
 ];
 
 export function Hero() {
@@ -100,14 +101,17 @@ export function Hero() {
 
   return (
     <section id="hero" className="relative px-4 py-8 sm:px-6 sm:py-12 overflow-hidden">
-      <div ref={containerRef} className="relative mx-auto max-w-6xl w-full">
+      <h1 className="sr-only">
+        {profile.name}, {profile.title}: I bring clarity and character to systems and products
+      </h1>
+      <div ref={containerRef} className="relative mx-auto max-w-6xl w-full" aria-hidden="true">
 
         {/* WORK */}
         <div className="flex items-start gap-2">
           <div className="overflow-hidden">
-            <h1 className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
+            <p className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
               character
-            </h1>
+            </p>
           </div>
         </div>
 
@@ -115,9 +119,9 @@ export function Hero() {
         <div className="relative -mt-1 sm:-mt-2 flex items-center gap-2">
           <div className="absolute left-0 top-1/2 h-2 w-full -translate-y-1/2 bg-white z-10" />
           <div className="overflow-hidden">
-            <h2 className="hero-text relative z-0 text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
+            <p className="hero-text relative z-0 text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
               to systems
-            </h2>
+            </p>
           </div>
         </div>
 
@@ -125,9 +129,9 @@ export function Hero() {
         <div className="relative -mt-1 sm:-mt-2 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-0">
           <div className="flex items-start gap-2 pl-[10vw] sm:pl-[15vw]">
             <div className="overflow-hidden">
-              <h2 className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
+              <p className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
                 and 
-              </h2>
+              </p>
             </div>
           </div>
 
@@ -150,7 +154,7 @@ export function Hero() {
               </svg>
             </span>
             <span className="hero-bracket absolute -left-2 -bottom-2 text-zinc-400 z-20">
-              <svg width="16" viewBox="0 0 16 16" fill="none">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M1 10L1 15L6 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </span>
@@ -170,6 +174,7 @@ export function Hero() {
                     src={src}
                     alt={`Screenshot of a project by ${profile.name}`}
                     fill
+                    sizes="180px"
                     className="object-cover"
                     priority={i === 0}
                   />
@@ -195,9 +200,9 @@ export function Hero() {
         {/* PRODUCTS */}
         <div className="flex items-start gap-2 pl-[2vw] sm:pl-[4vw]">
           <div className="overflow-hidden">
-            <h2 className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
+            <p className="hero-text text-[11vw] font-black leading-[0.85] tracking-tighter text-zinc-900 uppercase sm:text-[13vw] lg:text-[10vw]">
               products
-            </h2>
+            </p>
           </div>
         </div>
 

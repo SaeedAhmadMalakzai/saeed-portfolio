@@ -78,9 +78,10 @@ function Logo() {
     <Link
       href="/"
       className="relative"
+      aria-label={`${profile.name}, home`}
     >
-      <h2
-        className="font-bold tracking-tight whitespace-pre-line"
+      <span
+        className="block font-bold tracking-tight whitespace-pre-line"
         style={{
           fontSize: "clamp(1.4rem, 1vw, 1.8rem)",
           fontFamily: '"Nepos Simplex Solid", "Nepos Simplex", sans-serif',
@@ -91,7 +92,7 @@ function Logo() {
         }}
       >
         {profile.shortName}
-      </h2>
+      </span>
     </Link>
   );
 }
@@ -247,7 +248,11 @@ export function Header() {
         </div>
       </header>
 
-      <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}>
+      <div
+        className={`fixed top-0 left-0 w-full z-50 border-b border-zinc-200/70 bg-white/85 backdrop-blur-md transition-all duration-500 ${scrolled ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-full opacity-0"}`}
+        aria-hidden={!scrolled}
+        inert={!scrolled}
+      >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Logo />
           <BookCallButton />

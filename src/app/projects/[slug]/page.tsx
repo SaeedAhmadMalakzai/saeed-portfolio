@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getProjectBySlug, projects } from "@/lib/data";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
+import { ScreenGallery } from "@/components/ui/ScreenGallery";
 import { ScreenshotViewer } from "@/components/ui/ScreenshotViewer";
 
 interface ProjectPageProps {
@@ -22,6 +23,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: project.title,
     description: project.description,
+    alternates: { canonical: `/projects/${project.slug}` },
+    openGraph: project.image ? { images: [project.image] } : undefined,
   };
 }
 
@@ -33,16 +36,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  const hasPhoneScreens = Boolean(project.screens?.length);
+  const hasGallery = Boolean(project.gallery?.length);
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <Link
-        href="/projects"
-        className="text-sm font-medium text-zinc-600 hover:underline"
-      >
+      <Link href="/projects" className="text-sm font-medium text-zinc-600 hover:underline">
         ← All projects
       </Link>
       <h1 className="mt-6 text-3xl font-bold">{project.title}</h1>
-      <div className="mt-3 flex items-center gap-3 text-sm text-zinc-500">
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-500">
         {project.platform && (
           <span className="font-mono uppercase tracking-wider">{project.platform}</span>
         )}
@@ -52,35 +55,30 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             Live
           </span>
         )}
+        {project.client && <span>Client: {project.client}</span>}
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
         {project.tags.map((tag) => (
           <Badge key={tag}>{tag}</Badge>
         ))}
       </div>
+
       {project.fullImage ? (
-        <ScreenshotViewer
-          src={project.fullImage}
+        <ScreenshotViewer src={project.fullImage} alt={project.title} heightClass="h-[65vh] sm:h-[75vh]" />
+      ) : project.image && !hasGallery && !hasPhoneScreens ? (
+        <Image
+          src={project.image}
           alt={project.title}
-          heightClass="h-[65vh] sm:h-[75vh]"
+          width={1600}
+          height={1000}
+          priority
+          sizes="(max-width: 768px) 100vw, 768px"
+          className="mt-8 h-auto w-full rounded-xl border border-zinc-200"
         />
-      ) : project.image ? (
-        project.platform === "iOS" ? (
-          <ScreenshotViewer
-            src={project.image}
-            alt={project.title}
-            heightClass="h-[65vh] sm:h-[75vh]"
-          />
-        ) : (
-          <Image
-            src={project.image}
-            alt={project.title}
-            width={1440}
-            height={900}
-            className="mt-8 w-full rounded-xl border border-zinc-200 object-cover"
-          />
-        )
       ) : null}
+
+      {hasPhoneScreens && <ScreenGallery screens={project.screens!} variant="phone" />}
+
       <p className="mt-8 text-lg text-zinc-700">{project.description}</p>
       {project.highlights && project.highlights.length > 0 && (
         <ul className="mt-6 space-y-3">
@@ -92,21 +90,35 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           ))}
         </ul>
       )}
-      {project.content && (
-        <p className="mt-4 text-zinc-600">{project.content}</p>
-      )}
-      <div className="mt-8 flex flex-wrap gap-4">
+      {project.content && <p className="mt-4 text-zinc-600">{project.content}</p>}
+
+      <div className="mt-8 flex flex-wrap items-center gap-4">
+        {project.downloadUrl && (
+          <ButtonLink href={project.downloadUrl} download>
+            {project.downloadLabel ?? "Download"}
+          </ButtonLink>
+        )}
+        {project.pageUrl && (
+          <ButtonLink href={project.pageUrl} external variant={project.downloadUrl ? "outline" : "primary"}>
+            Visit the project page
+          </ButtonLink>
+        )}
         {project.liveUrl && (
-          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-            <Button>Visit Live Site</Button>
-          </a>
+          <ButtonLink href={project.liveUrl} external>
+            Visit Live Site
+          </ButtonLink>
         )}
         {project.repoUrl && (
-          <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline">View Code on GitHub</Button>
-          </a>
+          <ButtonLink href={project.repoUrl} external variant="outline">
+            View Code on GitHub
+          </ButtonLink>
+        )}
+        {project.availability && (
+          <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">{project.availability}</span>
         )}
       </div>
+
+      {hasGallery && <ScreenGallery screens={project.gallery!} variant="window" />}
     </main>
   );
 }

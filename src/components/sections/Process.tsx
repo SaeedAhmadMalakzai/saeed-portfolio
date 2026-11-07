@@ -16,7 +16,7 @@ const processes = [
     title: "Discovery & Strategy",
     description:
       "I start by understanding your goals, users, and constraints. Through research and planning, I define a clear roadmap that aligns technology with business outcomes — so every decision is intentional.",
-    image: "/images/projects/rahnaward.jpg",
+    image: "/images/projects/erp-stock.jpg",
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const processes = [
     title: "Design & Prototype",
     description:
       "I craft clean, intuitive interfaces with a focus on usability and aesthetics. From wireframes to high-fidelity prototypes, I ensure the experience feels right before a single line of code is written.",
-    image: "/images/projects/kaar.png",
+    image: "/images/projects/24tabib-cover.jpg",
   },
   {
     id: 3,
@@ -65,7 +65,7 @@ function DisplayCard({
       )}
     >
       <div>
-        <span className="relative inline-block bg-gray-800 p-1">
+        <span className={cn("relative inline-block bg-gray-800 p-1", iconClassName)}>
           {icon}
         </span>
         <p className={cn("text-base sm:text-lg font-medium", titleClassName)}>{title}</p>

@@ -85,7 +85,8 @@ function useMetalClick() {
 
 // ─── 3D Isometric CD Logo (Exact chanhdai.com recreation) ───
 function IsometricCDLogo() {
-  const id = useId();
+  // useId() contains characters such as ":" that break url(#id) references in SVG
+  const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const ids = {
     facePattern: `ncdai-face-pattern-${id}`,
     faceFill: `ncdai-face-fill-${id}`,

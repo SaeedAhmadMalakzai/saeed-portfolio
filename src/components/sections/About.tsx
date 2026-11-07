@@ -133,29 +133,20 @@ export function About() {
               transform: sectionVisible ? "translateX(0)" : "translateX(-30px)",
             }}
           >
-            <div className="relative aspect-[3/4] w-full max-w-xs overflow-hidden">
-              <Image
-                src="/images/me.jpg"
-                alt={`Portrait of ${profile.name}`}
-                fill
-                className="object-cover grayscale"
-              />
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  backgroundColor: "#e8e8e3",
-                  mixBlendMode: "multiply",
-                  opacity: 0.85,
-                }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage: `radial-gradient(circle, #000 1px, transparent 1px)`,
-                  backgroundSize: "4px 4px",
-                }}
-              />
-            </div>
+            <figure className="w-full max-w-xs">
+              <div className="relative aspect-square w-full overflow-hidden border border-zinc-300 bg-[#e8e8e3]">
+                <Image
+                  src="/images/saeed-illustration.jpg"
+                  alt={`Illustrated portrait of ${profile.name}`}
+                  fill
+                  sizes="320px"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                {profile.name} · {profile.location}
+              </figcaption>
+            </figure>
           </div>
 
           {/* Right: Scrollable Content - takes 3 columns */}

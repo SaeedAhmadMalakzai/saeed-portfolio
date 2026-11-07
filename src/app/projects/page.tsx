@@ -7,13 +7,14 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Production web, mobile, and desktop projects — Kankor.af, Hire.af, Kaar.af, Parly, Peygham, Rahnaward, JobPulse, and Jirga.",
+    "Web, Android, iOS, macOS and browser-extension projects: SayHello, 24Tabib, Galaxy Power ERP, KankorPass, Peygham, JobPulse, Find&Filter_Tenders-Afg and more.",
 };
 
 export default function ProjectsPage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-12">
       <SectionHeading
+        as="h1"
         title="All Projects"
         subtitle="Production web, mobile, and desktop applications I have designed, built, and shipped"
       />

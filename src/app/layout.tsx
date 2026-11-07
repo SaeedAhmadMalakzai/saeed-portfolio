@@ -17,13 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saeed-portfolio-amber.vercel.app"),
+  metadataBase: new URL("https://saeedmalakzai.vercel.app"),
   title: {
     default: `${profile.name} | ${profile.title}`,
     template: `%s | ${profile.name}`,
   },
   description:
-    "Full-stack & mobile developer building production web, iOS, and desktop applications — Next.js, React, Node.js, Python, and Swift/SwiftUI.",
+    "Full-stack & mobile developer building production web, Android, iOS and desktop applications — Next.js, React, Node.js, Kotlin, Python and Swift/SwiftUI.",
   keywords: [
     "Saeed Ahmad Malakzai",
     "Full-Stack Developer",
@@ -36,10 +36,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${profile.name} | ${profile.title}`,
     description:
-      "Full-stack & mobile developer building production web, iOS, and desktop applications.",
+      "Full-stack & mobile developer building production web, Android, iOS and desktop applications.",
     type: "website",
-    images: ["/images/profile.jpg"],
+    url: "/",
+    images: [{ url: "/images/saeed-illustration.jpg", width: 1000, height: 1000, alt: profile.name }],
   },
+  twitter: {
+    card: "summary",
+    images: ["/images/saeed-illustration.jpg"],
+  },
+  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({

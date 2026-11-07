@@ -8,20 +8,18 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const panImage = project.fullImage ?? project.image;
-
   return (
     <Link
       href={`/projects/${project.slug}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-shadow hover:shadow-md"
     >
-      {panImage && (
+      {project.fullImage ? (
         <div
           className="relative h-44 w-full overflow-hidden border-b border-zinc-100"
           style={{ backgroundColor: "#e8e8e3", ["--pan-window" as string]: "11rem" }}
         >
           <Image
-            src={panImage}
+            src={project.fullImage}
             alt={`Screenshot of ${project.title}`}
             width={720}
             height={2000}
@@ -32,7 +30,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
             Preview
           </span>
         </div>
-      )}
+      ) : project.image ? (
+        <div className="relative h-44 w-full overflow-hidden border-b border-zinc-100 bg-[#e8e8e3]">
+          <Image
+            src={project.image}
+            alt={`Screens of ${project.title}`}
+            fill
+            sizes="(max-width: 640px) 100vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        </div>
+      ) : null}
       <div className="flex flex-1 flex-col p-6">
         <h3 className="font-semibold group-hover:underline">{project.title}</h3>
         <div className="mt-2 flex items-center gap-2 text-xs text-zinc-500">
@@ -44,6 +52,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <span className="h-1.5 w-1.5 rounded-full bg-green-600" aria-hidden />
               Live
             </span>
+          )}
+          {!project.liveUrl && project.downloadUrl && (
+            <span className="font-mono uppercase tracking-wider text-zinc-700">Download</span>
           )}
         </div>
         <p className="mt-2 text-sm text-zinc-600">{project.description}</p>

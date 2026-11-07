@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 /**
@@ -9,7 +9,6 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
  * Animations: draw-on reveal, 3D tilt on hover, floating idle
  */
 export function Isometric() {
-  const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -41,7 +40,7 @@ export function Isometric() {
     };
     animate();
     return () => cancelAnimationFrame(animationId);
-  }, []);
+  }, [floatY]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;

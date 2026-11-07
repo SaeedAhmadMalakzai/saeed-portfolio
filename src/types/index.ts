@@ -8,6 +8,11 @@ export interface Skill {
   category: string;
 }
 
+export interface Screenshot {
+  src: string;
+  alt: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -18,9 +23,22 @@ export interface Project {
   image?: string;
   /** Tall full-page capture used by the scrollable screenshot viewer */
   fullImage?: string;
+  /** Portrait phone screenshots, shown in device frames */
+  screens?: Screenshot[];
+  /** Extra landscape screenshots (desktop app windows, dashboards) */
+  gallery?: Screenshot[];
   tags: string[];
   liveUrl?: string;
   repoUrl?: string;
+  /** The project's own one-page site */
+  pageUrl?: string;
+  /** Direct download (APK, extension .zip) */
+  downloadUrl?: string;
+  downloadLabel?: string;
+  /** Store status shown when there is no download yet */
+  availability?: string;
+  /** Who the work was for, when it was client work */
+  client?: string;
   featured?: boolean;
   platform?: string;
 }
