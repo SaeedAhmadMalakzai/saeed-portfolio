@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Space_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { profile } from "@/lib/data";
@@ -11,10 +11,14 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
+
+const DESCRIPTION =
+  "Saeed Ahmad Malakzai builds native Android and iOS apps, web platforms and small tools in Kabul: 24Tabib, SayHello, Peygham, Kaar.af and more.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://saeedmalakzai.vercel.app"),
@@ -22,21 +26,19 @@ export const metadata: Metadata = {
     default: `${profile.name} | ${profile.title}`,
     template: `%s | ${profile.name}`,
   },
-  description:
-    "Full-stack & mobile developer building production web, Android, iOS and desktop applications — Next.js, React, Node.js, Kotlin, Python and Swift/SwiftUI.",
+  description: DESCRIPTION,
   keywords: [
     "Saeed Ahmad Malakzai",
     "Full-Stack Developer",
     "Mobile Developer",
+    "Android",
+    "iOS",
     "Next.js",
-    "React",
-    "SwiftUI",
     "Afghanistan",
   ],
   openGraph: {
     title: `${profile.name} | ${profile.title}`,
-    description:
-      "Full-stack & mobile developer building production web, Android, iOS and desktop applications.",
+    description: DESCRIPTION,
     type: "website",
     url: "/",
     images: [{ url: "/images/saeed-illustration.jpg", width: 1000, height: 1000, alt: profile.name }],
@@ -54,11 +56,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
-    >
+    <html lang="en" className={`${geistSans.variable} ${spaceMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-3 focus:font-mono focus:text-sm focus:text-paper"
+        >
+          Skip to content
+        </a>
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />

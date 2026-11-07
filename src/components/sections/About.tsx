@@ -1,250 +1,97 @@
-"use client";
-
-import { profile } from "@/lib/data";
 import Image from "next/image";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { certifications, education, profile, skills } from "@/lib/data";
+import { ShelfHead } from "@/components/showcase/ShelfHead";
 import { GitHubActivity } from "./GitHubActivity";
 
-const services = [
-  {
-    icon: "/a1.svg",
-    title: "Production-ready builds",
-    description:
-      "From requirements and data modeling to deployment on Linux VPS and cloud platforms — I deliver systems end to end, not just prototypes.",
-  },
-  {
-    icon: "/a2.svg",
-    title: "Real-time & payments",
-    description:
-      "WebSockets, WebRTC voice rooms, live messaging, and payment/escrow integrations (Stripe, HesabPay) built into real products.",
-  },
-];
-
-const stats = [
-  { number: 20, suffix: "+", label: "Finalized projects" },
-  { number: 5, suffix: "+", label: "Years of experience" },
-];
-
-// Scroll animation hook
-function useScrollAnimation() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  return { ref, isVisible };
+/** Skills grouped by category, in the order the categories first appear */
+function skillGroups(): [string, string[]][] {
+  const groups = new Map<string, string[]>();
+  for (const skill of skills) {
+    groups.set(skill.category, [...(groups.get(skill.category) ?? []), skill.name]);
+  }
+  return [...groups.entries()];
 }
 
-// Animated counter hook
-function useCounter(end: number, duration: number = 1500, start: boolean = false) {
-  const [count, setCount] = useState(0);
-  const rafRef = useRef<number>(0);
-
-  const animate = useCallback(() => {
-    const startTime = performance.now();
-
-    const step = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Ease out cubic
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(easeOut * end));
-
-      if (progress < 1) {
-        rafRef.current = requestAnimationFrame(step);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(step);
-  }, [end, duration]);
-
-  useEffect(() => {
-    if (start) {
-      animate();
-    }
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [start, animate]);
-
-  return count;
-}
-
-// Animated stat number component
-function AnimatedStat({ number, suffix, label, start }: { number: number; suffix: string; label: string; start: boolean }) {
-  const count = useCounter(number, 1500, start);
-
+function ListBlock({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div>
-      <p
-        className="text-5xl font-bold tracking-tight"
-        style={{
-          fontFamily: '"Nepos Simplex Solid", "Nepos Simplex", sans-serif',
-          color: "#000",
-        }}
-      >
-        {count}{suffix}
-      </p>
-      <p className="mt-2 text-sm text-neutral-500">{label}</p>
+    <div className="border-t border-[var(--rule)] pt-4">
+      <h3 className="label mb-4">{title}</h3>
+      {children}
     </div>
   );
 }
 
 export function About() {
-  const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation();
-  const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation();
-
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="bg-white py-24 text-black transition-all duration-1000"
-      style={{
-        opacity: sectionVisible ? 1 : 0,
-        transform: sectionVisible ? "translateY(0)" : "translateY(40px)",
-      }}
-    >
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6">
-          {/* Left: Sticky Portrait - takes 2 columns */}
-          <div
-            className="lg:col-span-2 lg:sticky lg:top-24 lg:self-start transition-all duration-1000 delay-200"
-            style={{
-              opacity: sectionVisible ? 1 : 0,
-              transform: sectionVisible ? "translateX(0)" : "translateX(-30px)",
-            }}
-          >
-            <figure className="w-full max-w-xs">
-              <div className="relative aspect-square w-full overflow-hidden border border-zinc-300 bg-[#e8e8e3]">
-                <Image
-                  src="/images/saeed-illustration.jpg"
-                  alt={`Illustrated portrait of ${profile.name}`}
-                  fill
-                  sizes="320px"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
-                {profile.name} · {profile.location}
-              </figcaption>
-            </figure>
+    <section id="about" aria-labelledby="about-title" className="wrap">
+      <ShelfHead id="about-title" title="About" note={`${profile.location} · 5+ years`} />
+      <div className="grid gap-12 py-16 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16">
+        <figure className="max-w-[320px]">
+          <Image
+            src="/images/saeed-illustration.jpg"
+            alt={`Illustrated portrait of ${profile.name}`}
+            width={1000}
+            height={1000}
+            sizes="320px"
+            className="block h-auto w-full"
+          />
+          <figcaption className="label mt-3 text-[11px]">
+            {profile.name} · {profile.location}
+          </figcaption>
+        </figure>
+
+        <div className="min-w-0">
+          <p className="max-w-[34ch] text-[clamp(24px,2.4vw,32px)] font-semibold leading-[1.3] tracking-[-0.02em]">
+            I’m Saeed, a full-stack and mobile developer in Kabul. For more than five years I have designed, built and
+            shipped web, mobile and desktop apps from start to finish.
+          </p>
+          <p className="mt-6 max-w-[62ch] text-lg leading-[1.65] text-[var(--ink-2)]">
+            I work in TypeScript and JavaScript (Next.js, React, Vue and Nuxt, Node.js), Python (Django, Flask, FastAPI),
+            Kotlin and Swift with SwiftUI. I have hands-on experience with real-time features over WebSockets and
+            WebRTC, payment and escrow integrations, database design, AI and language-model integration, and
+            deployment on Linux servers and cloud platforms.
+          </p>
+
+          <div className="mt-14 grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-10">
+            <ListBlock title="Work with">
+              <dl className="space-y-3 text-[15px] leading-[1.5]">
+                {skillGroups().map(([category, names]) => (
+                  <div key={category}>
+                    <dt className="font-mono text-xs text-[var(--muted)]">{category}</dt>
+                    <dd className="text-[var(--ink-2)]">{names.join(", ")}</dd>
+                  </div>
+                ))}
+              </dl>
+            </ListBlock>
+            <ListBlock title="Education">
+              <ul className="space-y-3 text-[15px] leading-[1.5]">
+                {education.map((item) => (
+                  <li key={item.institution}>
+                    <p className="font-semibold">{item.degree}</p>
+                    <p className="text-[var(--ink-3)]">{item.institution}</p>
+                    <p className="font-mono text-xs text-[var(--muted)]">{item.period}</p>
+                  </li>
+                ))}
+              </ul>
+            </ListBlock>
+            <ListBlock title="Certifications">
+              <ul className="space-y-2 text-[15px] leading-[1.5] text-[var(--ink-2)]">
+                {certifications.map((cert) => (
+                  <li key={cert.name}>
+                    {cert.name}
+                    <span className="text-[var(--muted)]">
+                      {" "}
+                      · {cert.issuer}
+                      {cert.date ? `, ${cert.date}` : ""}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </ListBlock>
           </div>
 
-          {/* Right: Scrollable Content - takes 3 columns */}
-          <div
-            className="lg:col-span-3 flex flex-col min-w-0 transition-all duration-1000 delay-400"
-            style={{
-              opacity: sectionVisible ? 1 : 0,
-              transform: sectionVisible ? "translateX(0)" : "translateX(30px)",
-            }}
-          >
-            {/* Bio */}
-            <div className="space-y-6">
-              <h2
-                className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-[0.15em]"
-                style={{
-                  fontFamily: '"Nepos Simplex Solid", "Nepos Simplex", sans-serif',
-                  color: "#000",
-                }}
-              >
-                About
-              </h2>
-              <p className="text-lg leading-relaxed text-neutral-800">
-                I&apos;m {profile.name}, a full-stack software developer based in{" "}
-                {profile.location}, with 5+ years of experience designing, building,
-                and deploying production web, mobile, and desktop applications.
-              </p>
-              <p className="text-lg leading-relaxed text-neutral-800">
-                I work across TypeScript/JavaScript (Next.js, React, Vue/Nuxt,
-                Node.js), Python (Django, Flask, FastAPI), and Swift/SwiftUI —
-                with hands-on experience in real-time systems (WebSockets, WebRTC),
-                payment and escrow integrations, database design, AI/LLM
-                integration, and end-to-end deployment on Linux VPS and cloud
-                platforms.
-              </p>
-            </div>
-
-            {/* Services - icon in black box using Image component */}
-            <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2">
-              {services.map((service, index) => (
-                <div
-                  key={service.title}
-                  className="transition-all duration-700"
-                  style={{
-                    opacity: sectionVisible ? 1 : 0,
-                    transform: sectionVisible ? "translateY(0)" : "translateY(20px)",
-                    transitionDelay: `${600 + index * 150}ms`,
-                  }}
-                >
-                  {/* Black box with SVG icon from public folder */}
-                  <div
-                    className="inline-flex items-center justify-center w-12 h-12"
-                    style={{ backgroundColor: "#0a0e15" }}
-                  >
-                    <Image
-                      src={service.icon}
-                      alt=""
-                      width={20}
-                      height={20}
-                      className="w-5 h-5"
-                      style={{ filter: "brightness(0) invert(1)" }}
-                    />
-                  </div>
-                  <h3 className="mt-4 text-base font-semibold text-black">
-                    {service.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-500">
-                    {service.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Stats + Live GitHub Activity */}
-            <div
-              ref={statsRef}
-              className="mt-16 transition-all duration-700"
-              style={{
-                opacity: sectionVisible ? 1 : 0,
-                transform: sectionVisible ? "translateY(0)" : "translateY(20px)",
-                transitionDelay: "900ms",
-              }}
-            >
-              <div className="grid grid-cols-2 gap-8">
-                {stats.map((stat) => (
-                  <AnimatedStat
-                    key={stat.label}
-                    number={stat.number}
-                    suffix={stat.suffix}
-                    label={stat.label}
-                    start={statsVisible}
-                  />
-                ))}
-              </div>
-
-              <div className="mt-8 p-4 overflow-x-auto" style={{ backgroundColor: "#0d1117" }}>
-                <GitHubActivity />
-              </div>
-            </div>
+          <div className="mt-12 overflow-x-auto bg-[var(--ink)] p-4">
+            <GitHubActivity />
           </div>
         </div>
       </div>

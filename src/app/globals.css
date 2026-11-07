@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import "tailwindcss";
 
 /* Nepos Simplex Solid served locally from /public instead of a third-party CDN */
@@ -12,100 +11,231 @@
   font-display: swap;
 }
 
-@layer base {
-  body {
-    font-family: 'Space Mono', monospace;
-  }
-
-  span {
-    font-family: var(--font-geist-sans), system-ui, sans-serif;
-  }
-}
-
+/* Showcase: black on white, no colour behind any screen. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #0a0a0a;
+  --ink-2: #262626;
+  --ink-3: #404040;
+  --muted: #525252;
+  --muted-2: #6b6b6b;
+  --rule: #d4d4d4;
+  --rule-soft: #e5e5e5;
+  --paper: #ffffff;
+  --live: #15803d;
+  --download: #1d4ed8;
+  --soon: #6a4cff;
+  --source: #525252;
+  --archive: #a3a3a3;
+  --gutter: clamp(16px, 4vw, 48px);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: 'Space Mono', monospace;
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, monospace;
+  --font-display: "Nepos Simplex Solid", var(--font-geist-sans), sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+/* The header only sticks from tablet width up, so only then do anchors need room for it */
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 88px;
+  }
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-/* Thin template-styled scrollbar for the full-page screenshot viewer */
-.screenshot-frame {
-  scrollbar-width: thin;
-  scrollbar-color: #0a0e15 #e8e8e3;
-}
-
-.screenshot-frame::-webkit-scrollbar {
-  width: 6px;
-}
-
-.screenshot-frame::-webkit-scrollbar-track {
-  background: #e8e8e3;
-}
-
-.screenshot-frame::-webkit-scrollbar-thumb {
-  background: #0a0e15;
-}
-
-/* Slow vertical pan used by project cards & the featured carousel:
-   translateY(-100%) is relative to the tall image itself, the trailing
-   offset pulls it back so the bottom edge stays in view. */
-.pan-on-hover {
-  transition: transform 5s ease-in-out;
-}
-
-.group:hover .pan-on-hover,
-.pan-hover-target:hover .pan-on-hover {
-  transform: translateY(calc(-100% + var(--pan-window, 100%)));
-}
-
-/* Touch devices can't hover — auto-play the pan instead */
-@keyframes pan-object-y {
-  from {
-    object-position: center top;
-  }
-  to {
-    object-position: center bottom;
-  }
-}
-
-@keyframes pan-translate-y {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(calc(-100% + var(--pan-window, 100%)));
-  }
-}
-
-@media (hover: none) {
-  .pan-object-auto {
-    animation: pan-object-y 14s ease-in-out infinite alternate;
-  }
-
-  .pan-on-hover {
-    animation: pan-translate-y 14s ease-in-out infinite alternate;
-  }
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pan-object-auto,
-  .pan-on-hover {
-    animation: none !important;
-    transition: none !important;
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@layer components {
+  .wrap {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Small uppercase label in Space Mono */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    background: var(--ink);
+    color: var(--paper);
+    font: 700 13px/1 var(--font-mono);
+    text-decoration: none;
+    transition: background-color 0.15s;
+  }
+  .btn:hover {
+    background: var(--ink-2);
+  }
+
+  .lnk {
+    font: 700 13px/1 var(--font-mono);
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 4px;
+  }
+  .lnk:hover {
+    color: var(--muted);
+    border-color: var(--muted);
+  }
+
+  .btn:focus-visible,
+  .lnk:focus-visible,
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 9px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    font: 700 11px/1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border-radius: 50%;
+  }
+
+  /* Phone frame: a black bezel straight on the white page */
+  .phone {
+    border: 7px solid var(--ink);
+    border-radius: 30px;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .phone img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Two or three phones side by side; the middle one sits higher */
+  .phones {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 220px);
+    justify-content: center;
+    align-items: center;
+    gap: clamp(10px, 1.8vw, 26px);
+    padding-block: 28px;
+  }
+  .phones.raise-middle > :nth-child(2):not(:last-child) {
+    transform: translateY(-28px);
+  }
+
+  /* Browser frame for web projects */
+  .browser {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 32px;
+    padding-inline: 12px;
+    border-bottom: 1px solid var(--rule);
+    font: 400 11px/1 var(--font-mono);
+    color: var(--muted-2);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .browser-bar i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--rule);
+  }
+
+  /* A screenshot that is not a phone: a thin rule, no background */
+  .shot {
+    display: block;
+    border: 1px solid var(--rule);
+  }
+
+  .shelf-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 88px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .shelf-head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4vw, 48px);
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  /* Fixed-height picture area of a tile: phones or a screenshot, centred */
+  .media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    height: 300px;
+  }
+  .media .phone {
+    height: 100%;
+    border-width: 6px;
+    border-radius: 24px;
+  }
+  .media .phone img {
+    width: auto;
+    height: 100%;
+  }
+  .media .shot {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Scrollable full-page capture inside the browser frame */
+  .scroll-frame {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink) transparent;
   }
 }

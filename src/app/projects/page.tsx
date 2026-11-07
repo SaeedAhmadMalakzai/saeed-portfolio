@@ -1,61 +1,52 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { certifications, education, projects } from "@/lib/data";
-import { ProjectCard } from "@/components/ui/ProjectCard";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { TileGrid } from "@/components/showcase/ProjectTile";
+import { ShelfHead } from "@/components/showcase/ShelfHead";
+import { getShelf, projects } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Web, Android, iOS, macOS and browser-extension projects: SayHello, 24Tabib, Peygham, Kaar.af, JobPulse, Find&Filter_Tenders-Afg and more.",
+    "Android, iOS, web, macOS and Chrome extension projects: 24Tabib, SayHello, Peygham, Kaar.af, Find&Filter_Tenders-Afg, JobPulse and more.",
+  alternates: { canonical: "/projects" },
 };
 
 export default function ProjectsPage() {
+  const web = [...getShelf("web"), ...projects.filter((project) => project.contribution)];
+  const archive = projects.filter((project) => project.archived);
+  const shelves = [
+    { id: "mobile", title: "Mobile apps", note: "Android · iOS", items: getShelf("mobile") },
+    { id: "web", title: "Web platforms", note: "Live sites", items: web },
+    { id: "tools", title: "Tools", note: "Chrome · macOS · Android", items: getShelf("tools") },
+  ];
+
   return (
-    <main className="mx-auto max-w-5xl px-6 py-12">
-      <SectionHeading
-        as="h1"
-        title="All Projects"
-        subtitle="Production web, mobile, and desktop applications I have designed, built, and shipped"
-      />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
-        ))}
-      </div>
+    <main id="main" className="wrap pb-24">
+      <p className="mt-6">
+        <Link href="/" className="lnk border-b font-normal">
+          ← Home
+        </Link>
+      </p>
+      <h1 className="mt-10 text-[clamp(56px,9vw,128px)] font-black leading-[0.88] tracking-[-0.055em]">
+        All projects
+      </h1>
+      <p className="mt-5 max-w-[44ch] text-[clamp(19px,2vw,24px)] leading-[1.4] text-[var(--ink-3)]">
+        {projects.length} projects: apps you can download, sites you can visit, small tools, and older work.
+      </p>
 
-      <section className="mt-16 grid gap-10 sm:grid-cols-2" aria-label="Education and certifications">
-        <div>
-          <h2 className="text-lg font-semibold uppercase tracking-[0.15em]">Education</h2>
-          <ul className="mt-4 space-y-4">
-            {education.map((item) => (
-              <li key={item.institution}>
-                <p className="font-medium">{item.degree}</p>
-                <p className="text-sm text-zinc-600">{item.institution}</p>
-                <p className="text-sm text-zinc-500">{item.period}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold uppercase tracking-[0.15em]">Certifications</h2>
-          <ul className="mt-4 space-y-2">
-            {certifications.map((cert) => (
-              <li key={cert.name} className="text-sm text-zinc-700">
-                {cert.name}
-                <span className="text-zinc-500"> — {cert.issuer}{cert.date ? `, ${cert.date}` : ""}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {shelves.map((shelf) => (
+        <section key={shelf.id} id={shelf.id} aria-labelledby={`${shelf.id}-title`}>
+          <ShelfHead id={`${shelf.id}-title`} title={shelf.title} note={shelf.note} count={shelf.items.length} />
+          <TileGrid projects={shelf.items} />
+        </section>
+      ))}
 
-      <Link
-        href="/"
-        className="mt-12 inline-block text-sm font-medium hover:underline"
-      >
-        ← Back to home
-      </Link>
+      {archive.length > 0 && (
+        <section id="archive" aria-labelledby="archive-title">
+          <ShelfHead id="archive-title" title="Archive" note="No live site or public code right now" count={archive.length} />
+          <TileGrid projects={archive} />
+        </section>
+      )}
     </main>
   );
 }
