@@ -7,7 +7,7 @@ import gsap from "gsap";
 
 const images = [
   "/images/projects/sayhello-cover.jpg",
-  "/images/projects/24tabib-cover-2611.jpg",
+  "/images/projects/24tabib-cover-ios.jpg",
   "/images/projects/kaar.jpg",
   "/images/projects/scholarships.jpg",
   "/images/projects/peygham-cover.jpg",
