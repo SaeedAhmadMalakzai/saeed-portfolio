@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     "24Tabib",
     "SayHello",
     "Peygham",
-    "Kaar.af",
+    "Abaseen",
   ],
   robots: {
     index: true,

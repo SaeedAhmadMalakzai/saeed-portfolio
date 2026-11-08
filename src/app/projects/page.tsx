@@ -10,7 +10,7 @@ import { graph, projectsPageNodes } from "@/lib/structured-data";
 export const metadata: Metadata = pageMetadata({
   title: "Projects",
   description:
-    "Every project by Saeed Ahmad Malakzai: Android and iOS apps like 24Tabib, SayHello and Peygham, web platforms like Kaar.af, and tools for Chrome, macOS and Android.",
+    "Every project by Saeed Ahmad Malakzai: Android and iOS apps like 24Tabib, SayHello and Peygham, web platforms like Abaseen, and tools for Chrome, macOS and Android.",
   path: "/projects",
 });
 

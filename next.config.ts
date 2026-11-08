@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },
+  // Kaar.af was renamed Abaseen on 2026-11-08; keep the old project address working.
+  async redirects() {
+    return [{ source: "/projects/kaar", destination: "/projects/abaseen", permanent: true }];
+  },
 };
 
 export default nextConfig;
